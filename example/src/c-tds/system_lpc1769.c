@@ -66,7 +66,7 @@ void SYSTEM_Identify_Required_Mode(void)
     {
         // Cleared only by software or POR
         // Clear flag (or other resets may be interpreted as WDT)
-        LPC_SYSCTL->RSID &= ~(0x04);
+        LPC_SYSCTL->RSID |= (0x04);
 
         // Set system mode (Fail Silent)
         System_mode_G = FAIL_SILENT;
