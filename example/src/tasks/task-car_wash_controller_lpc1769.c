@@ -107,9 +107,9 @@ void CAR_WASH_CONTROLLER_Init(void)
                                                                 MOTOR2 => MOTOR_OFF
 	If COME_OUT && S1_switch_pressed_G is sensor off &&
 	               S2_switch_pressed_G is sensor off &&
-	               S3_switch_pressed_G is sensor on     => COME_OUT
-	                                                       Time_in_state_G = 0
-	If FAULT                                            => FAULT
+	               S3_switch_pressed_G is sensor off    	=> IDLE
+	                                                           Time_in_state_G = 0
+	If FAULT                                            	=> FAULT
 
     Must schedule every 1 mili second (soft deadline).
 
