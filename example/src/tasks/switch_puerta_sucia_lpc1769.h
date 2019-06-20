@@ -1,16 +1,15 @@
 /*--------------------------------------------------------------------*-
 
-    task-s1_switch_lpc1769.h (Released 2019-04)
+    task-gpio_switch_lpc1769.h (Released 2019-04)
 
 --------------------------------------------------------------------
 
-    - See task-s1_switch_lpc1769.c for details.
+    - See task-gpio_switch_lpc1769.c for details.
 
 -*--------------------------------------------------------------------*/
 
 
-#ifndef _S1_SWITCH_H
-#define _S1_SWITCH_H 1
+
 
 
 // ------ Public constants -----------------------------------------
@@ -20,11 +19,12 @@
 
 
 // ------ Public function prototypes -------------------------------
-void S1_SWITCH_Init(void);
-void S1_SWITCH_Update(void);
+void GPIO_SWITCH_PUERTA_SUCIA_Init(void);
+void GPIO_SWITCH_PUERTA_SUCIA_Update(void);
+void GPIO_SWITCH_PUERTA_SUCIA_Update(void);
 
 
-#endif
+
 
 /*------------------------------------------------------------------*-
   ---- END OF FILE -------------------------------------------------

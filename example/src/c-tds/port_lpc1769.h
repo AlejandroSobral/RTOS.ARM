@@ -28,6 +28,11 @@
 #define LED_ON	(true)
 #define LED_OFF	(false)
 
+// Allows NO or NC switch to be used (or other wiring variations)
+#define SW_PRESSED		(false)
+#define SW_NOT_PRESSED	(true)
+#define ABIERTA 0
+#define CERRADA 1
 
 // Heartbeat LED
 // Connected to "LED2" on LPC1769 board
@@ -37,84 +42,72 @@
 #define HEARTBEAT_LED_PIN_MODE (IOCON_MODE_INACT)
 #define HEARTBEAT_LED_PIN_FUNC (IOCON_FUNC0)
 
-
-// RGB LED
-// Connected to "RED" on LPC1769 board
-// Port 2, Pin 0
-#define MOTOR1_LED_PORT (2)
-#define MOTOR1_LED_PIN (0)
-#define MOTOR1_LED_PIN_MODE (IOCON_MODE_INACT)
-#define MOTOR1_LED_PIN_FUNC (IOCON_FUNC0)
+// SWITCH PUERTA LIMPIA
+#define GPIO_SWITCH_PUERTA_LIMPIA_PORT (0) // h{38}
+#define GPIO_SWITCH_PUERTA_LIMPIA_PIN (4)
+#define GPIO_SWITCH_PUERTA_LIMPIA_PIN_MODE (IOCON_MODE_PULLUP)
+#define GPIO_SWITCH_PUERTA_LIMPIA_PIN_FUNC (IOCON_FUNC0)
 
 
-// RGB LED
-// Connected to "GREEN" on LPC1769 board
-// Port 2, Pin 1
-#define MOTOR2_LED_PORT (2)
-#define MOTOR2_LED_PIN (1)
-#define MOTOR2_LED_PIN_MODE (IOCON_MODE_INACT)
-#define MOTOR2_LED_PIN_FUNC (IOCON_FUNC0)
+// SWITCH PUERTA SUCIA
+#define GPIO_SWITCH_PUERTA_SUCIA_PORT (0) // h{39}
+#define GPIO_SWITCH_PUERTA_SUCIA_PIN (5)
+#define GPIO_SWITCH_PUERTA_SUCIA_PIN_PIN_MODE (IOCON_MODE_PULLUP)
+#define GPIO_SWITCH_PUERTA_SUCIA_PIN_FUNC (IOCON_FUNC0)
 
-// RGB LED
-// Connected to "BLUE" on LPC1769 board
-// Port 0, Pin 26
+// BOTON EMERGENCIA MEDIO
+#define GPIO_SWITCH_PORT (2)
+#define GPIO_SWITCH_PIN (10)
+#define GPIO_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
+#define GPIO_SWITCH_PIN_FUNC (IOCON_FUNC0)
 
+// BOTON EMERGENCIA SALA LIMPIA
+#define GPIO_SWITCH_PORT (2)
+#define GPIO_SWITCH_PIN (10)
+#define GPIO_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
+#define GPIO_SWITCH_PIN_FUNC (IOCON_FUNC0)
 
-// Allows NO or NC switch to be used (or other wiring variations)
-#define SW_PRESSED		(false)
-#define SW_NOT_PRESSED	(true)
+// BOTON EMERGENCIA ENTRADA
+#define GPIO_SWITCH_PORT (2)
+#define GPIO_SWITCH_PIN (10)
+#define GPIO_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
+#define GPIO_SWITCH_PIN_FUNC (IOCON_FUNC0)
 
+// LUZ VERDE PUERTA ENTRADA
+#define LUZ_VERDE_ENTRADA_PORT (0) // h{40}
+#define LUZ_VERDE_ENTRADA_PIN (10)
+#define LUZ_VERDE_ENTRADA_PIN_MODE (IOCON_MODE_INACT)
+#define LUZ_VERDE_ENTRADA_PIN_FUNC (IOCON_FUNC0)
 
-// SW2-PRESS SWITCH
-// Connected to "SW2 PRESS" on LPCXpresso baseboard
-// Port 0, Pin 17
-#define E1_SWITCH_PORT (0)
-#define E1_SWITCH_PIN (17)
-#define E1_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
-#define E1_SWITCH_PIN_FUNC (IOCON_FUNC0)
+// LUZ ROJA PUERTA ENTRADA
+#define LUZ_ROJA_ENTRADA_PORT (0) // h{41}
+#define LUZ_ROJA_ENTRADA_PIN (11)
+#define LUZ_ROJA_ENTRADA_PIN_MODE (IOCON_MODE_INACT)
+#define LUZ_ROJA_ENTRADA_PIN_FUNC (IOCON_FUNC0)
 
+// LUZ VERDE PUERTA SALIDA
+#define LUZ_VERDE_SALIDA_PORT (2) // h{42}
+#define LUZ_VERDE_SALIDA_PIN (0)
+#define LUZ_VERDE_SALIDA_PIN_MODE (IOCON_MODE_INACT)
+#define LUZ_VERDE_SALIDA_PIN_FUNC (IOCON_FUNC0)
 
-// SW2-UP SWITCH
-// Connected to "SW2 UP" on LPCXpresso baseboard
-// Port 2, Pin 3
-#define S1_SWITCH_PORT (2)
-#define S1_SWITCH_PIN (3)
-#define S1_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
-#define S1_SWITCH_PIN_FUNC (IOCON_FUNC0)
+// LUZ ROJA PUERTA SALIDA
+#define LUZ_ROJA_SALIDA_PORT (2) // h{43}
+#define LUZ_ROJA_SALIDA_PIN (1)
+#define LUZ_ROJA_SALIDA_PIN_MODE (IOCON_MODE_INACT)
+#define LUZ_ROJA_SALIDA_PIN_FUNC (IOCON_FUNC0)
 
+// CERRADURA PUERTA ENTRADA O SUCIA
+#define CERRADURA_ENTRADA_PORT (0) // h{10}
+#define CERRADURA_ENTRADA_PIN (17)
+#define CERRADURA_ENTRADA_PIN_MODE (IOCON_MODE_INACT)
+#define CERRADURA_ENTRADA_PIN_FUNC (IOCON_FUNC0)
 
-// SW2-DOWN SWITCH
-// Connected to "SW2 DOWN" on LPCXpresso baseboard
-// Port 0, Pin 15
-
-
-// SW2-LEFT SWITCH
-// Connected to "SW2 LEFT" on LPCXpresso baseboard
-// Port 2, Pin 4
-
-
-// SW2-RIGHT SWITCH
-// Connected to "SW2 RIGHT" on LPCXpresso baseboard
-// Port 0, Pin 16
-
-
-// SW3 SWITCH
-// Connected to "SW3" on LPCXpresso baseboard
-// Port 2, Pin 10
-#define S2_SWITCH_PORT (2)
-#define S2_SWITCH_PIN (10)
-#define S2_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
-#define S2_SWITCH_PIN_FUNC (IOCON_FUNC0)
-
-
-// SW4 SWITCH
-// Connected to "SW4" on LPCXpresso baseboard
-// Port 1, Pin 31
-#define S3_SWITCH_PORT (1)
-#define S3_SWITCH_PIN (31)
-#define S3_SWITCH_PIN_MODE (IOCON_MODE_PULLUP)
-#define S3_SWITCH_PIN_FUNC (IOCON_FUNC0)
-
+// CERRADURA PUERTA SALIDA O LIMPIA
+#define CERRADURA_SALIDA_PORT (0) // h{11}
+#define CERRADURA_SALIDA_PIN (18)
+#define CERRADURA_SALIDA_PIN_MODE (IOCON_MODE_INACT)
+#define CERRADURA_SALIDA_PIN_FUNC (IOCON_FUNC0)
 
 // Add jumper wire on baseboard to control WDT
 // WDT is enabled *only* if jumper is in place.

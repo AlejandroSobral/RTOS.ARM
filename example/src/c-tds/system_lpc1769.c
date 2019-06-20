@@ -15,13 +15,11 @@
 // Task headers
 #include "../tasks/task-watchdog_lpc1769.h"
 #include "../tasks/task-heartbeat_lpc1769.h"
-#include "../tasks/task-e1_switch_lpc1769.h"
-#include "../tasks/task-s1_switch_lpc1769.h"
-#include "../tasks/task-s2_switch_lpc1769.h"
-#include "../tasks/task-s3_switch_lpc1769.h"
-#include "../tasks/task-motor1_led_lpc1769.h"
-#include "../tasks/task-motor2_led_lpc1769.h"
-#include "../tasks/task-car_wash_controller_lpc1769.h"
+#include "../tasks/switch_puerta_limpia_lpc1769.h"
+#include "../tasks/switch_puerta_sucia_lpc1769.h"
+#include "../tasks/luces_puertas.h"
+#include "../tasks/cerraduras_puertas.h"
+
 
 
 // ------ Public variable ------------------------------------------
@@ -124,29 +122,11 @@ void SYSTEM_Configure_Required_Mode(void)
             // Set up WDT (timeout in *microseconds*)
             WATCHDOG_Init(WatchDog_RateuS);
 
-        	// Prepare to Read E1 SWITCH task
-        	E1_SWITCH_Init();
-
-        	// Prepare to Read S1 SWITCH task
-        	S1_SWITCH_Init();
-
-        	// Prepare to Read S2 SWITCH task
-        	S2_SWITCH_Init();
-
-        	// Prepare to Read S3 SWITCH task
-        	S3_SWITCH_Init();
-
-        	// Prepare to Write MOTOR1 LED task
-        	MOTOR1_LED_Init();
-
-        	// Prepare to Write MOTOR2 LED task
-        	MOTOR2_LED_Init();
-
-        	// Prepare to CAR_WASH_CONTROLLER task
-        	CAR_WASH_CONTROLLER_Init();
-
-        	// Prepare for Heartbeat task
+            GPIO_SWITCH_PUERTA_LIMPIA_Init();
+            GPIO_SWITCH_PUERTA_SUCIA_Init();
         	HEARTBEAT_Init();
+        	LUCES_PUERTAS_Init();
+        	cerraduras_puertas_Init();
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -157,31 +137,13 @@ void SYSTEM_Configure_Required_Mode(void)
             // 5. Task BCET (in microseconds)
 
             // Add watchdog task first
-            SCH_Add_Task(WATCHDOG_Update, 0, 1, 10, 0);
+        	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 10, 0);
+        	 SCH_Add_Task(GPIO_SWITCH_PUERTA_LIMPIA_Update,  1, 10, 20, 0);
+        	 SCH_Add_Task(GPIO_SWITCH_PUERTA_SUCIA_Update,  1, 10, 20, 0);
+        	 SCH_Add_Task(LUCES_PUERTAS_Update,  1, 10, 20, 0);
+        	 SCH_Add_Task(cerraduras_puertas_Update,  1, 10, 20, 0);
 
-            // Add E1_SWITCH task
-            SCH_Add_Task(E1_SWITCH_Update, 1, 10, 20, 0);
 
-            // Add S1_SWITCH task
-            SCH_Add_Task(S1_SWITCH_Update, 1, 10, 20, 0);
-
-            // Add S2_SWITCH task
-            SCH_Add_Task(S2_SWITCH_Update, 1, 10, 20, 0);
-
-            // Add S3_SWITCH task
-            SCH_Add_Task(S3_SWITCH_Update, 1, 10, 20, 0);
-
-            // Add MOTOR1_LED task
-            SCH_Add_Task(MOTOR1_LED_Update, 2, 10, 10, 0);
-
-            // Add MOTOR2_LED task
-            SCH_Add_Task(MOTOR2_LED_Update, 2, 10, 10, 0);
-
-            // Add CAR_WASH_CONTROLLER task
-            SCH_Add_Task(CAR_WASH_CONTROLLER_Update, 0, 10, 40, 0);
-
-            // Add Heartbeat task
-            SCH_Add_Task(HEARTBEAT_Update, 0, 1000, 20, 0);
 
             break;
         }

@@ -1,27 +1,27 @@
 /*--------------------------------------------------------------------*-
 
-    task-motor2_led_lpc1769.h (Released 2019-04)
+    task-gpio_switch_lpc1769.h (Released 2019-04)
 
 --------------------------------------------------------------------
 
-    - See task-motor2_led_lpc1769.c for details.
+    - See task-gpio_switch_lpc1769.c for details.
 
 -*--------------------------------------------------------------------*/
 
 
-#ifndef _MOTOR2_LED_H
-#define _MOTOR2_LED_H 1
+#ifndef _GPIO_SWITCH_H
+#define _GPIO_SWITCH_H 1
 
 
 // ------ Public constants -----------------------------------------
 
 
-// ------ Public data type declarations ----------------------------
+// ------ Public data type -----------------------------------------
 
 
 // ------ Public function prototypes -------------------------------
-void MOTOR2_LED_Init(void);
-void MOTOR2_LED_Update(void);
+void GPIO_SWITCH_PUERTA_LIMPIA_Init(void);
+void GPIO_SWITCH_PUERTA_LIMPIA_Update(void);
 
 
 #endif
