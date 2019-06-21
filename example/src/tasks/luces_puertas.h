@@ -17,7 +17,8 @@
 // ------ Public function prototypes -------------------------------
 void LUCES_PUERTAS_Init(void);
 void LUCES_PUERTAS_Update(void);
-
+#define OFF 0
+#define ON 1
 
 
 

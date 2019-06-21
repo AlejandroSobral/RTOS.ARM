@@ -32,9 +32,6 @@ static uint8_t antirrebote_veces;
 static uint8_t toggle;
 static uint8_t contador_toggle;
 
-#define ON 1
-#define OFF 0
-
 if(toggle)
 {contador_toggle++;
 	if(contador_toggle >= 200)

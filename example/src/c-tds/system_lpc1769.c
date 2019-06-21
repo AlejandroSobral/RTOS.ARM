@@ -19,7 +19,7 @@
 #include "../tasks/switch_puerta_sucia_lpc1769.h"
 #include "../tasks/luces_puertas.h"
 #include "../tasks/cerraduras_puertas.h"
-
+#include "../tasks/switch_emergencia.h"
 
 
 // ------ Public variable ------------------------------------------
@@ -127,6 +127,8 @@ void SYSTEM_Configure_Required_Mode(void)
         	HEARTBEAT_Init();
         	LUCES_PUERTAS_Init();
         	cerraduras_puertas_Init();
+        	LUCES_PUERTAS_Init();
+        	GPIO_SWITCH_Emergencia_Init();
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -142,6 +144,8 @@ void SYSTEM_Configure_Required_Mode(void)
         	 SCH_Add_Task(GPIO_SWITCH_PUERTA_SUCIA_Update,  1, 10, 20, 0);
         	 SCH_Add_Task(LUCES_PUERTAS_Update,  1, 10, 20, 0);
         	 SCH_Add_Task(cerraduras_puertas_Update,  1, 10, 20, 0);
+        	 SCH_Add_Task(LUCES_PUERTAS_Update,  1, 10, 20, 0);
+        	 SCH_Add_Task(GPIO_SWITCH_Emergencia_Update,  1, 10, 20, 0);
 
 
 
