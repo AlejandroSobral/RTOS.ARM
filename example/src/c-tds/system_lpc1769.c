@@ -15,11 +15,9 @@
 // Task headers
 #include "../tasks/task-watchdog_lpc1769.h"
 #include "../tasks/task-heartbeat_lpc1769.h"
-#include "../tasks/switch_puerta_limpia_lpc1769.h"
-#include "../tasks/switch_puerta_sucia_lpc1769.h"
-#include "../tasks/luces_puertas.h"
-#include "../tasks/cerraduras_puertas.h"
-#include "../tasks/switch_emergencia.h"
+#include "../tasks/dht11.h"
+#include "../tasks/demoramicrosegundos.h"
+
 
 
 // ------ Public variable ------------------------------------------
@@ -114,7 +112,7 @@ void SYSTEM_Configure_Required_Mode(void)
         case NORMAL:
         {
         	// Set up scheduler for 1 ms ticks (tick interval in *ms*)
-            SCH_Init(1);
+            SCH_Init(10);
 
             /* Initialize WWDT and event router */
         	Chip_WWDT_Init(LPC_WWDT);
@@ -122,13 +120,8 @@ void SYSTEM_Configure_Required_Mode(void)
             // Set up WDT (timeout in *microseconds*)
             WATCHDOG_Init(WatchDog_RateuS);
 
-            GPIO_SWITCH_PUERTA_LIMPIA_Init();
-            GPIO_SWITCH_PUERTA_SUCIA_Init();
         	HEARTBEAT_Init();
-        	LUCES_PUERTAS_Init();
-        	cerraduras_puertas_Init();
-        	LUCES_PUERTAS_Init();
-        	GPIO_SWITCH_Emergencia_Init();
+        	GPIO_DHT11_Init();
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -140,12 +133,8 @@ void SYSTEM_Configure_Required_Mode(void)
 
             // Add watchdog task first
         	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 10, 0);
-        	 SCH_Add_Task(GPIO_SWITCH_PUERTA_LIMPIA_Update,  1, 10, 20, 0);
-        	 SCH_Add_Task(GPIO_SWITCH_PUERTA_SUCIA_Update,  1, 10, 20, 0);
-        	 SCH_Add_Task(LUCES_PUERTAS_Update,  1, 10, 20, 0);
-        	 SCH_Add_Task(cerraduras_puertas_Update,  1, 10, 20, 0);
-        	 SCH_Add_Task(LUCES_PUERTAS_Update,  1, 10, 20, 0);
-        	 SCH_Add_Task(GPIO_SWITCH_Emergencia_Update,  1, 10, 20, 0);
+        	 SCH_Add_Task(GPIO_DHT11,  1, 3, 9, 0);
+
 
 
 
