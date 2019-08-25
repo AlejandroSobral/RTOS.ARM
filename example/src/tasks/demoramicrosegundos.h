@@ -4,7 +4,9 @@
 // ------ Public data type -----------------------------------------
 
 
-// ------ Public function prototypes -------------------------------
-void demoramicrosegundo(uint32_t);
+// ------ Public function prototypes -------------------------------//
+
+int demoramicrosegundo (int);
+void Timer1_Init(void);
 
 

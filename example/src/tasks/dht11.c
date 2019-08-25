@@ -7,7 +7,9 @@
 
 // ------ Public variable ------------------------------------------
 struct_sensores STRUCT_SENSOR;
-uint8_t DemoraInicial;
+uint8_t DemoraInicial = 0, EstadoLectura = DEMORA;
+uint8_t demora_lanzada = 0;
+
 
 // ------ Private variable -----------------------------------------
 void GPIO_DHT11_Init(void)
@@ -16,34 +18,89 @@ void GPIO_DHT11_Init(void)
 	Chip_IOCON_PinMux(LPC_IOCON, GPIO_DHT11_PORT, GPIO_DHT11_PIN, GPIO_DHT11_PIN_PIN_MODE, GPIO_DHT11_PIN_FUNC);
 	//Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+
+
 	Chip_GPIO_WritePortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN, true); // LO DEJO EN UNO POR DEFECTO
-	uint8_t DemoraInicial = 0;
+
 }
+
+void Timer1_Init(void)
+{
+
+	// Power-on Timer 1
+	Chip_TIMER_Init(LPC_TIMER1);
+
+	//Change Timer PCLK.
+	Chip_Clock_SetPCLKDiv(SYSCTL_PCLK_TIMER0,SYSCTL_CLKDIV_1);
+
+	// Initialize Timer 1, prescale counter = 1 μs
+	Chip_TIMER_PrescaleSet(LPC_TIMER1,TIM_PRESCALE_USVAL-1);
+
+	// Use channel 1, MR1
+	Chip_TIMER_SetMatch(LPC_TIMER1,1,0);
+
+	// Set timer flag when MR0 matches the value in TC register
+	Chip_TIMER_MatchEnableInt(LPC_TIMER1,0);
+
+	// Enable reset on MR0: timer will reset if MR0 matches it
+	Chip_TIMER_ResetOnMatchEnable(LPC_TIMER1,0);
+
+	// Stop timer if MR0 matches it
+	Chip_TIMER_StopOnMatchEnable(LPC_TIMER1,0);
+
+	// IMPORTANT:
+	// Interrupt priorities must be set in Scheduler init function
+	// [Not yet started timer]
+}
+
 
 void GPIO_DHT11(void)
 {
 
 		uint8_t Estado_Anterior	= ALTO; //Por default
-		uint8_t contador		= 0;
+		uint8_t contador		= 0, ValorLeido;
+		uint8_t nada;
+		extern uint8_t demora_lanzada;
 		extern uint8_t DemoraInicial ;
+		extern uint8_t EstadoLectura ;
 		uint8_t Numero_Bit		= 0, Numero_Transicion = 0;
 		extern struct_sensores STRUCT_SENSOR;
 
 
 		 //BAJO EL PIN Y ESPERO 20mS aprox
-		Chip_GPIO_WritePortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN, false);
-		if( DemoraInicial == 3){
-			DemoraInicial = 0;
+		if(EstadoLectura == DEMORA && DemoraInicial < 2){
+			Chip_GPIO_SetPinDIROutput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+			Chip_GPIO_WritePortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN, false);
 
+
+			DemoraInicial++;
+		}
+		else  { EstadoLectura = LEYENDO;
+				DemoraInicial = 0;
+		}
+
+		if( EstadoLectura == LEYENDO){
 
 //		/* Pongo el pin en 0 18mS -- START */
 //		GPIO_SetDir(port_sensor, pin_sensor, SALIDA );
 //		GPIO_SetPin( port_sensor, pin_sensor, BAJO );
 //		delayMilisegundo( 18 );
 
-			Chip_GPIO_WritePortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN, true);
-			Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+			Chip_GPIO_SetPinState(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN, true);
+			demoramicrosegundo(3);
 
+											while(demora_lanzada == 1)
+											{
+
+											}
+											Chip_TIMER_Disable(LPC_TIMER1);
+											// Disable interrupt for Timer 0
+											NVIC_DisableIRQ(TIMER1_IRQn);
+
+
+
+			Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+			//Chip_IOCON_PinMux(LPC_IOCON, GPIO_DHT11_PORT, GPIO_DHT11_PIN, IOCON_MODE_INACT, GPIO_DHT11_PIN_FUNC);
 		/* Pongo el pin en 1 40uS -- WAIT */
 //		GPIO_SetPin( port_sensor, pin_sensor, ALTO );
 //		GPIO_SetDir(port_sensor, pin_sensor, ENTRADA );
@@ -55,20 +112,38 @@ void GPIO_DHT11(void)
 		for ( Numero_Transicion = 0; Numero_Transicion < 85; Numero_Transicion++ )
 		{
 			contador = 0;
-			while (  Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN) == Estado_Anterior  )
+			ValorLeido = Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+
+
+			while (  Estado_Anterior == ValorLeido   )
 			{
+				ValorLeido = Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
 				contador++;
-				demoramicrosegundo( 10 );
+
+				demoramicrosegundo(1);
+
+								while(demora_lanzada == 1)
+								{
+
+								}
+								Chip_TIMER_Disable(LPC_TIMER1);
+								// Disable interrupt for Timer 0
+								NVIC_DisableIRQ(TIMER1_IRQn);
 
 				if ( contador == 25 )
 				{
+					EstadoLectura = DEMORA;
+					DemoraInicial = 0;
 					break;
 				}
 			}
-			Estado_Anterior = Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+			ValorLeido = Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
+			Estado_Anterior = ValorLeido;
 
 			if ( contador == 25 )
 			{
+				EstadoLectura = DEMORA;
+				DemoraInicial = 0;
 				break;
 			}
 
@@ -77,7 +152,7 @@ void GPIO_DHT11(void)
 			{
 				/* Guardo el bit en el array de data */
 				STRUCT_SENSOR.DATA_SENSOR_ARRAY[Numero_Bit / 8] <<= 1;
-				if ( contador > 3 ) // ESTE UMBRAL SE AJUSTA A OJIMETRO!
+				if ( contador > 2 ) // ESTE UMBRAL SE AJUSTA A OJIMETRO!
 					STRUCT_SENSOR.DATA_SENSOR_ARRAY[Numero_Bit / 8] |= 1;
 				Numero_Bit++;
 			}
@@ -99,10 +174,13 @@ void GPIO_DHT11(void)
 
 				STRUCT_SENSOR.Valor_Temperatura = STRUCT_SENSOR.DATA_SENSOR_ARRAY[2] ; // INTEGRAL TEMP
 				STRUCT_SENSOR.Valor_Temperatura += STRUCT_SENSOR.DATA_SENSOR_ARRAY[3] / 10; // DECIMAL TEMP
+
+						DemoraInicial = 0;
+						EstadoLectura = DEMORA;
 		}
 
-	}// CIERRO EL IF DE LAS VECES
-		else {DemoraInicial++;}
+	}
+
 
 		// ENCIENDO LAS INTERRUPCIONES
 }

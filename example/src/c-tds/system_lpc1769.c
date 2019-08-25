@@ -122,6 +122,7 @@ void SYSTEM_Configure_Required_Mode(void)
 
         	HEARTBEAT_Init();
         	GPIO_DHT11_Init();
+        	Timer1_Init();
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -133,7 +134,8 @@ void SYSTEM_Configure_Required_Mode(void)
 
             // Add watchdog task first
         	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 10, 0);
-        	 SCH_Add_Task(GPIO_DHT11,  1, 3, 9, 0);
+        	 SCH_Add_Task(GPIO_DHT11,  1, 1, 10, 0);
+        	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 10, 0);
 
 
 

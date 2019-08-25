@@ -186,6 +186,20 @@ void TIMER0_IRQHandler(void)
 	}
 }
 
+void TIMER1_IRQHandler(void)
+{
+	extern uint8_t demora_lanzada;
+	// if MR0 interrupt, proceed
+	if(Chip_TIMER_MatchPending(LPC_TIMER1,0))
+	{
+		// Clear MR0 interrupt flag
+		Chip_TIMER_ClearMatch(LPC_TIMER1,0);
+		demora_lanzada = 0;
+
+
+	}
+}
+
 
 /*------------------------------------------------------------------*-
 ---- END OF FILE -------------------------------------------------

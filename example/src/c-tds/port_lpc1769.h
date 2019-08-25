@@ -30,6 +30,8 @@
 #define CERRADA 1
 #define ALTO 1
 #define BAJO 0
+#define LEYENDO 1
+#define DEMORA 2
 // Heartbeat LED
 // Connected to "LED2" on LPC1769 board
 // Port 0, Pin 22
@@ -38,10 +40,10 @@
 #define HEARTBEAT_LED_PIN_MODE (IOCON_MODE_INACT)
 #define HEARTBEAT_LED_PIN_FUNC (IOCON_FUNC0)
 
-// SWITCH PUERTA SUCIA
-#define GPIO_DHT11_PORT (0) // h{39}
-#define GPIO_DHT11_PIN (2)
-#define GPIO_DHT11_PIN_PIN_MODE (IOCON_MODE_PULLUP)
+// DHT11
+#define GPIO_DHT11_PORT (2) // h{39}
+#define GPIO_DHT11_PIN (0)
+#define GPIO_DHT11_PIN_PIN_MODE (IOCON_MODE_INACT)
 #define GPIO_DHT11_PIN_FUNC (IOCON_FUNC0)
 
 
