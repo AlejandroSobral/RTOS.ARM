@@ -18,6 +18,7 @@
 // ID of task that is currently being monitored
 static uint32_t Task_ID_G;
 static uint32_t Task_BCET_G;
+static uint32_t Task_WCET_G;
 static uint32_t Task_t_variation_G;
 
 
@@ -75,6 +76,7 @@ void MONITTOR_I_Start(const uint32_t TASK_ID,
 {
 	Task_ID_G = TASK_ID;
 	Task_BCET_G = TASK_BCET_us;
+	Task_WCET_G = TASK_WCET_us;
 	Task_t_variation_G = ALLOWED_TIMING_VARIATION_us;
 
 	// Timeout value (in microseconds)
@@ -126,6 +128,13 @@ uint32_t MONITTOR_I_Stop(void)
 		actual->Debug.LET = Execution_time_us;
 		actual->Debug.State |= SCH_DEBUG_TASK_UNDERRUN;
 	}
+
+	if( (Execution_time_us + Task_t_variation_G) > Task_WCET_G)
+		{
+			SYSTEM_Change_Mode_Fault(FAULT_TASK_TIMING);
+			actual = SCH_Get_Current_Task_Pointer();
+			actual->Debug.WCET = Execution_time_us;
+		}
 
 	return Execution_time_us;
 }

@@ -68,7 +68,7 @@ void GPIO_DHT11(void)
 
 
 		 //BAJO EL PIN Y ESPERO 20mS aprox
-		if(EstadoLectura == DEMORA && DemoraInicial < 2){
+		if(EstadoLectura == DEMORA && DemoraInicial < 1){
 			Chip_GPIO_SetPinDIROutput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
 			Chip_GPIO_WritePortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN, false);
 
@@ -100,7 +100,7 @@ void GPIO_DHT11(void)
 
 
 			Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
-			//Chip_IOCON_PinMux(LPC_IOCON, GPIO_DHT11_PORT, GPIO_DHT11_PIN, IOCON_MODE_INACT, GPIO_DHT11_PIN_FUNC);
+			Chip_IOCON_PinMux(LPC_IOCON, GPIO_DHT11_PORT, GPIO_DHT11_PIN, IOCON_MODE_PULLUP, GPIO_DHT11_PIN_FUNC);
 		/* Pongo el pin en 1 40uS -- WAIT */
 //		GPIO_SetPin( port_sensor, pin_sensor, ALTO );
 //		GPIO_SetDir(port_sensor, pin_sensor, ENTRADA );

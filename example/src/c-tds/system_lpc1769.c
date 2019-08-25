@@ -133,9 +133,9 @@ void SYSTEM_Configure_Required_Mode(void)
             // 5. Task BCET (in microseconds)
 
             // Add watchdog task first
-        	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 10, 0);
-        	 SCH_Add_Task(GPIO_DHT11,  1, 1, 10, 0);
-        	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 10, 0);
+        	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
+        	 SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
+        	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 350, 0);
 
 
 
