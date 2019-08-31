@@ -74,9 +74,9 @@ typedef struct{
 } struct_sensores;
 
 typedef struct{
-	uint32_t DATA_SENSOR_ARRAY[5];
-	uint32_t Aceleracion[2]; // 0 -> X, 1 -> Y, 2 -> Z.
-	uint32_t Orientacion[2];  // 0 -> X, 1 -> Y, 2 -> Z.
+
+	 float Aceleracion[3]; // 0 -> X, 1 -> Y, 2 -> Z.
+	 float Orientacion[3];  // 0 -> X, 1 -> Y, 2 -> Z.
 } struct_acelerometro;
 
 
