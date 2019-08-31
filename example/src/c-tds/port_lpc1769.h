@@ -73,6 +73,15 @@ typedef struct{
 	uint8_t BufferHumedad[4];
 } struct_sensores;
 
+typedef struct{
+	uint32_t DATA_SENSOR_ARRAY[5];
+	uint32_t Aceleracion[2]; // 0 -> X, 1 -> Y, 2 -> Z.
+	uint32_t Orientacion[2];  // 0 -> X, 1 -> Y, 2 -> Z.
+} struct_acelerometro;
+
+
+
+
 // ------ Public function prototypes -------------------------------
 
 

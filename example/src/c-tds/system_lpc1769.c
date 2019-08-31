@@ -15,6 +15,7 @@
 // Task headers
 #include "../tasks/task-watchdog_lpc1769.h"
 #include "../tasks/task-heartbeat_lpc1769.h"
+#include "../tasks/acelerometro.h"
 #include "../tasks/dht11.h"
 #include "../tasks/demoramicrosegundos.h"
 
@@ -123,6 +124,7 @@ void SYSTEM_Configure_Required_Mode(void)
         	HEARTBEAT_Init();
         	GPIO_DHT11_Init();
         	Timer1_Init();
+        	Acelerometro_Init();
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -136,6 +138,8 @@ void SYSTEM_Configure_Required_Mode(void)
         	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	 SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
         	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 350, 0);
+        	 SCH_Add_Task( Acelerometro_Update,  1, 1, 500, 0);
+
 
 
 
