@@ -11,7 +11,6 @@
 // Project header
 #include "../main/main.h"
 
-
 // Task headers
 #include "../tasks/task-watchdog_lpc1769.h"
 #include "../tasks/task-heartbeat_lpc1769.h"
@@ -126,7 +125,7 @@ void SYSTEM_Configure_Required_Mode(void)
         	GPIO_DHT11_Init();
         	Timer1_Init();
         	Acelerometro_Init();
-
+        	ADC0_Init();
         	UartMonitor_Init();
 
         	// Add tasks to schedule.
@@ -143,6 +142,8 @@ void SYSTEM_Configure_Required_Mode(void)
         	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
         	 SCH_Add_Task( Acelerometro_Update,  1, 2, 50000, 0);
         	 SCH_Add_Task( UartMonitor,  1, 1, 200000, 0);
+        	 SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
+
 
 
 
