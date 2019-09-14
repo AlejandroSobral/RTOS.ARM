@@ -18,6 +18,7 @@
 #include "../tasks/dht11.h"
 #include "../tasks/UartMonitor.h"
 #include "../tasks/demoramicrosegundos.h"
+#include "../tasks/BatteryLife.h"
 
 
 
