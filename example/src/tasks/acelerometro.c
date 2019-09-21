@@ -4,6 +4,7 @@
 #include "chip.h"
 #include "string.h"
 #include <stdio.h>
+#include "math.h"
 
 uint32_t enviarSerie;
 uint8_t buf[LEN_BUF];
@@ -48,7 +49,7 @@ static uint8_t ContadorSerie;
 extern uint32_t enviarSerie;
 
 
-	if(ContadorSerie > 25)
+	if(ContadorSerie > 40)
 		{enviarSerie = 0;
 		ContadorSerie = 0;
 		}
@@ -71,22 +72,22 @@ extern uint32_t enviarSerie;
 
 					// En m/s
 
-					DataAcelerometro.IntAceleracion[0] = DataAcelerometro.Aceleracion[0];
-					DataAcelerometro.IntAceleracion[0] = DataAcelerometro.IntAceleracion[0]*Gravedad;
-					DataAcelerometro.IntAceleracion[0] = DataAcelerometro.IntAceleracion[0]/16384;
+					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.Aceleracion[0];
+					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.FloatAceleracion[0]*Gravedad;
+					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.FloatAceleracion[0]/16384;
 
 
-					DataAcelerometro.IntAceleracion[1] = DataAcelerometro.Aceleracion[1];
-					DataAcelerometro.IntAceleracion[1] = DataAcelerometro.IntAceleracion[1]*Gravedad;
-					DataAcelerometro.IntAceleracion[1] = DataAcelerometro.IntAceleracion[1]/16384;
+					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.Aceleracion[1];
+					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.FloatAceleracion[1]*Gravedad;
+					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.FloatAceleracion[1]/16384;
 
-					DataAcelerometro.IntAceleracion[2] = DataAcelerometro.Aceleracion[2];
-					DataAcelerometro.IntAceleracion[2] = DataAcelerometro.IntAceleracion[2]*Gravedad;
-					DataAcelerometro.IntAceleracion[2] = DataAcelerometro.IntAceleracion[2]/16384;
+					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.Aceleracion[2];
+					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]*Gravedad;
+					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]/16384;
 
-					if(DataAcelerometro.IntAceleracion[0]<0)DataAcelerometro.IntAceleracion[0] = -DataAcelerometro.IntAceleracion[0];
-					if(DataAcelerometro.IntAceleracion[1]<0)DataAcelerometro.IntAceleracion[1] = -DataAcelerometro.IntAceleracion[1];
-					if(DataAcelerometro.IntAceleracion[2]<0)DataAcelerometro.IntAceleracion[2] = -DataAcelerometro.IntAceleracion[2];
+					if(DataAcelerometro.FloatAceleracion[0]<0)DataAcelerometro.FloatAceleracion[0] = -DataAcelerometro.FloatAceleracion[0];
+					if(DataAcelerometro.FloatAceleracion[1]<0)DataAcelerometro.FloatAceleracion[1] = -DataAcelerometro.FloatAceleracion[1];
+					if(DataAcelerometro.FloatAceleracion[2]<0)DataAcelerometro.FloatAceleracion[2] = -DataAcelerometro.FloatAceleracion[2];
 
 
 
@@ -95,17 +96,29 @@ extern uint32_t enviarSerie;
 
 		Chip_I2C_MasterCmdRead(I2C1,0x68,0x43,buf,6);
 
-						DataAcelerometro.Orientacion[0] = (((short)buf[0])<<8)|buf[1];
-						DataAcelerometro.Orientacion[1] = (((short)buf[2])<<8)|buf[3];
-						DataAcelerometro.Orientacion[2] = (((short)buf[4])<<8)|buf[5];
+						DataAcelerometro.AceleracionAngular[0] = (((short)buf[0])<<8)|buf[1];
+						DataAcelerometro.AceleracionAngular[1] = (((short)buf[2])<<8)|buf[3];
+						DataAcelerometro.AceleracionAngular[2] = (((short)buf[4])<<8)|buf[5];
 
+					DataAcelerometro.FloatAceleracionAngular[2] = DataAcelerometro.AceleracionAngular[2];
+					DataAcelerometro.FloatAceleracionAngular[2] = DataAcelerometro.FloatAceleracionAngular[2]*250; // º/s
+					DataAcelerometro.FloatAceleracionAngular[2] = DataAcelerometro.FloatAceleracionAngular[2]/(16384); // º/s
 
-					DataAcelerometro.IntOrientacion[2] = DataAcelerometro.Orientacion[2]/(32768); // º/s
-					DataAcelerometro.IntOrientacion[2] = DataAcelerometro.Orientacion[2]*250; // º/s
-					DataAcelerometro.IntOrientacion[1] = DataAcelerometro.Orientacion[1]/(32768); // º/s
-					DataAcelerometro.IntOrientacion[1] = DataAcelerometro.Orientacion[1]*250; // º/s
-					DataAcelerometro.IntOrientacion[0] = DataAcelerometro.Orientacion[0]/(32768); // º/s
-					DataAcelerometro.IntOrientacion[0] = DataAcelerometro.Orientacion[0]*250; // º/s
+					DataAcelerometro.FloatAceleracionAngular[1] = DataAcelerometro.AceleracionAngular[1];
+					DataAcelerometro.FloatAceleracionAngular[1] = DataAcelerometro.FloatAceleracionAngular[1]*250; // º/s
+			        DataAcelerometro.FloatAceleracionAngular[1] = DataAcelerometro.FloatAceleracionAngular[1]/(16384); // º/s
+
+			        DataAcelerometro.FloatAceleracionAngular[0] = DataAcelerometro.AceleracionAngular[0];
+			        DataAcelerometro.FloatAceleracionAngular[0] = DataAcelerometro.FloatAceleracionAngular[0]*250; // º/s
+			        DataAcelerometro.FloatAceleracionAngular[0] = DataAcelerometro.FloatAceleracionAngular[0]/(16384); // º/s
+
+			        DataAcelerometro.Orientacion[0] = 180 * atan (DataAcelerometro.FloatAceleracion[0]/1000/sqrt(DataAcelerometro.FloatAceleracion[1]/1000*DataAcelerometro.FloatAceleracion[1]/1000 + DataAcelerometro.FloatAceleracion[2]/1000*DataAcelerometro.FloatAceleracion[2]/1000))/3.1415;
+			        DataAcelerometro.Orientacion[1] = 180 * atan (DataAcelerometro.FloatAceleracion[1]/1000/sqrt(DataAcelerometro.FloatAceleracion[0]/1000*DataAcelerometro.FloatAceleracion[0]/1000 + DataAcelerometro.FloatAceleracion[2]/1000*DataAcelerometro.FloatAceleracion[2]/1000))/3.1415;
+
+			        if(DataAcelerometro.FloatAceleracionAngular[0]<0)DataAcelerometro.FloatAceleracionAngular[0] = -DataAcelerometro.FloatAceleracionAngular[0];
+			        if(DataAcelerometro.FloatAceleracionAngular[1]<0)DataAcelerometro.FloatAceleracionAngular[1] = -DataAcelerometro.FloatAceleracionAngular[1];
+			        if(DataAcelerometro.FloatAceleracionAngular[2]<0)DataAcelerometro.FloatAceleracionAngular[2] = -DataAcelerometro.FloatAceleracionAngular[2];
+
 
 
 
