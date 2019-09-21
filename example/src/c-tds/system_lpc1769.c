@@ -19,6 +19,7 @@
 #include "../tasks/UartMonitor.h"
 #include "../tasks/demoramicrosegundos.h"
 #include "../tasks/BatteryLife.h"
+#include "../tasks/logger.h"
 
 
 
@@ -144,6 +145,7 @@ void SYSTEM_Configure_Required_Mode(void)
         	 SCH_Add_Task( Acelerometro_Update,  1, 2, 50000, 0);
         	 SCH_Add_Task( UartMonitor,  1, 1, 200000, 0);
         	 SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
+        	 SCH_Add_Task( Logger,  1, 1, 200000, 0);
 
 
 
