@@ -67,7 +67,7 @@ void EstadoBateria(void)
 			}
 			else
 			{
-				SYSTEM_Perform_Safe_Shutdown();
+				//SYSTEM_Perform_Safe_Shutdown();
 			}
 			estado++;
 

@@ -18,7 +18,7 @@
 //4= Temperatura
 //5=Bateria
 
-uint32_t FlagUmbral[6];
+uint32_t FlagUmbral[NMROFLAGS];
 
 void Logger (void)
 {

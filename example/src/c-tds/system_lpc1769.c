@@ -20,6 +20,7 @@
 #include "../tasks/demoramicrosegundos.h"
 #include "../tasks/BatteryLife.h"
 #include "../tasks/logger.h"
+#include "../tasks/24LC256.h"
 
 
 
@@ -107,7 +108,7 @@ void SYSTEM_Configure_Required_Mode(void)
         {
             // Reset caused by WDT
             // Trigger "fail silent" behavior
-            SYSTEM_Perform_Safe_Shutdown();
+            //SYSTEM_Perform_Safe_Shutdown();
 
             break;
         }
@@ -129,6 +130,7 @@ void SYSTEM_Configure_Required_Mode(void)
         	Acelerometro_Init();
         	ADC0_Init();
         	UartMonitor_Init();
+        	//init_memoriai2c();
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -142,10 +144,13 @@ void SYSTEM_Configure_Required_Mode(void)
         	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	 SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
         	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
-        	 SCH_Add_Task( Acelerometro_Update,  1, 2, 50000, 0);
-        	 SCH_Add_Task( UartMonitor,  1, 1, 200000, 0);
-        	 SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
-        	 SCH_Add_Task( Logger,  1, 1, 200000, 0);
+        	 SCH_Add_Task( Acelerometro_Update,  1, 2, 80000, 0);
+        	 SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
+        	 //SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
+        	 SCH_Add_Task( Logger,  1, 2, 20000, 0);
+        	 SCH_Add_Task( ciclo_memoria,  3, 5, 200000, 0);
+        	 SCH_Add_Task( ciclo_memoria_read,  3, 5, 200000, 0);
+
 
 
 

@@ -18,14 +18,22 @@ void Acelerometro_Init (void){
 	Chip_IOCON_PinMux(LPC_IOCON, I2C_DEVICE_PORT, I2C_SCL_PIN, IOCON_MODE_INACT, IOCON_FUNC3);
 	Chip_IOCON_EnableOD(LPC_IOCON,I2C_DEVICE_PORT, I2C_SDA_PIN);
 	Chip_IOCON_EnableOD(LPC_IOCON,I2C_DEVICE_PORT, I2C_SDA_PIN);
-	Chip_I2C_Init(I2C_DEVICE_NUM);
-	Chip_I2C_SetClockRate(I2C_DEVICE_NUM,I2C_SPEED);
-	Chip_I2C_SetMasterEventHandler(I2C_DEVICE,Chip_I2C_EventHandlerPolling);
+	//Inicializo Acelerometro i2c
+	Chip_I2C_Init(I2C_DEVICE_NUM_ACEL);
+	Chip_I2C_SetClockRate(I2C_DEVICE_NUM_ACEL,I2C_SPEED_ACELEROMETRO);
+	Chip_I2C_SetMasterEventHandler(I2C_DEVICE_1,Chip_I2C_EventHandlerPolling); // Acelerometro
+	//Chip_I2C_SetMasterEventHandler(I2C_DEVICE_2,Chip_I2C_EventHandlerPolling)
+
+
+
+
+
+
 
 
 	/*Enciendo el Acelerómetro*/
 	/*Espero que arranque y lo configuro*/
-	for(i=0;i<1500000;i++);
+	//for(i=0;i<1500000;i++);
 	memset(buf,0,sizeof(uint8_t)*LEN_BUF);
 	buf[0]=0x6B;
 	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
@@ -37,6 +45,7 @@ void Acelerometro_Init (void){
 		buf[1]=0x00;
 
 	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
+
 
 
 
