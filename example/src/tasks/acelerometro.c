@@ -56,6 +56,7 @@ void Acelerometro_Update(void)
 {
 static uint8_t ContadorSerie;
 extern uint32_t enviarSerie;
+extern uint32_t FlagUmbral[6];
 
 
 	if(ContadorSerie > 40)
@@ -126,7 +127,12 @@ extern uint32_t enviarSerie;
 
 			        if(DataAcelerometro.FloatAceleracionAngular[0]<0)DataAcelerometro.FloatAceleracionAngular[0] = -DataAcelerometro.FloatAceleracionAngular[0];
 			        if(DataAcelerometro.FloatAceleracionAngular[1]<0)DataAcelerometro.FloatAceleracionAngular[1] = -DataAcelerometro.FloatAceleracionAngular[1];
-			        if(DataAcelerometro.FloatAceleracionAngular[2]<0)DataAcelerometro.FloatAceleracionAngular[2] = -DataAcelerometro.FloatAceleracionAngular[2];
+			        if(DataAcelerometro.FloatAceleracionAngular[2]<0){
+			        	DataAcelerometro.FloatAceleracionAngular[2] = -DataAcelerometro.FloatAceleracionAngular[2];
+			        	FlagUmbral[2] = 1; // INVERTIDO 180º
+
+			        }
+
 
 
 

@@ -28,6 +28,7 @@
 // In many designs, System_mode_G will be used in other modules.
 // - we therefore make this variable public.
 eSystem_mode System_mode_G;
+ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 
 
 // ------ Private function declarations ----------------------------
@@ -140,6 +141,14 @@ void SYSTEM_Configure_Required_Mode(void)
             // 4. Task WCET (in microseconds)
             // 5. Task BCET (in microseconds)
 
+        	switch(ESTADO_GLOBAL.Estado){ // SELECCIONO LA LISTA DE TAREAS
+        	case WORKING:
+			break;
+        	case READING:
+			break;
+        	}
+
+
             // Add watchdog task first
         	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	 SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
@@ -148,8 +157,8 @@ void SYSTEM_Configure_Required_Mode(void)
         	 SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
         	 //SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
         	 SCH_Add_Task( Logger,  1, 2, 20000, 0);
-        	 SCH_Add_Task( ciclo_memoria,  3, 5, 200000, 0);
-        	 SCH_Add_Task( ciclo_memoria_read,  3, 5, 200000, 0);
+        	 SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
+        	 SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
 
 
 

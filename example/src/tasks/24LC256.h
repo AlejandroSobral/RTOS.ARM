@@ -9,15 +9,22 @@
 #define TX_OK 0
 #define MaxPos 4064 // 127 paginas de 32 cada uno
 
+typedef struct{
+
+	uint8_t dataRX[TamPag];
+} struct_dataRXeeprom;
+
 I2C_STATUS_T Write_24LC (uint8_t * vec,uint16_t address);
 I2C_STATUS_T Read_24LC(uint8_t * vec,uint16_t address);
-void ciclo_memoria_read (void);
-void ciclo_memoria (void);
+void Ciclo_Memoria_Reading (void);
+void Ciclo_Memoria_Working (void);
 void init_memoriai2c (void);
 void test_memoria (void);
 I2C_STATUS_T GrabaPaginaI2c(uint8_t * frase,uint8_t A,uint8_t B);
 I2C_STATUS_T LeePaginaI2c(uint8_t * Buff,uint8_t A,uint8_t B);
 void LimpiaBuff(uint8_t * Buff);
 void PreparaPaginaUno (void);
+void PreparaPaginaDos (void);
+void PreparaPaginaTres (void);
 
 

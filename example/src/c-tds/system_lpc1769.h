@@ -49,8 +49,12 @@ typedef enum {FAIL_SILENT, NORMAL, FAULT_TASK_TIMING} eSystem_mode;
 
 
 // ------ Public data type declarations ----------------------------
+#define WORKING 0
+#define READING 1
 
-
+typedef struct{
+uint32_t Estado;
+} ESTADO_GLOBAL_DEF;
 // ------ Public function prototypes -------------------------------
 void SYSTEM_Init(void);
 void SYSTEM_Perform_Safe_Shutdown(void);
