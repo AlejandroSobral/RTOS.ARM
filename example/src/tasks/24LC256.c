@@ -8,7 +8,7 @@
 #include "string.h"
 #include "../c-tds/port_Lpc1769.h"
 #include "chip.h"
-#include <stdio.h>
+#include <stdio.h> //
 #include <math.h>
 #include "C:\Users\Alejandro\git2\lpc_chip_175x_6x\inc\eeprom_17xx_40xx.h"
 

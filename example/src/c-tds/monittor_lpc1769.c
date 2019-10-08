@@ -68,7 +68,7 @@ void MONITTOR_I_Init(void)
   ALLOWED_TIMING_VARIATION_us gives some flexibility in both
   WCET and BCET measurements.
 
--*--------------------------------------------------------------------*/
+-*---------------------------//-----------------------------------------*/
 void MONITTOR_I_Start(const uint32_t TASK_ID,
 					  const uint32_t TASK_WCET_us,
 					  const uint32_t TASK_BCET_us,

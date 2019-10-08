@@ -80,7 +80,7 @@ typedef struct{
 	 float FloatAceleracion[3];
 	 float FloatAceleracionAngular[3];
 	 float Orientacion[2];// 0 -> X, 1 -> Y
-} struct_acelerometro;
+} struct_acelerometro; //
 
 
 

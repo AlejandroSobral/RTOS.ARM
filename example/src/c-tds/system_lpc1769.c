@@ -5,7 +5,7 @@
     Controls system configuration after processor reset.
     [Two modes supported - "Normal" and "Fail Silent".]
 
--*--------------------------------------------------------------------*/
+-*-----//---------------------------------------------------------------*/
 
 
 // Project header

@@ -482,7 +482,7 @@ void SCH_Go_To_Sleep()
     {
     // Enter sleep mode = "Wait For Interrupt"
     __WFI();
-    }
+    } //
 
 
 uint32_t SCH_Get_Current_Task(void)
