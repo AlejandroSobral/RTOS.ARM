@@ -2,6 +2,9 @@
 #include "UartMonitor.h"
 #include "acelerometro.h"
 #include "BatteryLife.h"
+#include "../c-tds/system_lpc1769.h"
+#include "../c-tds/scheduler_lpc1769.h"
+#include "BatteryLife.h"
 #include "../main/main.h"
 #include "string.h"
 #include "../c-tds/port_Lpc1769.h"
@@ -27,6 +30,7 @@ void ADC0_Init(void)
 
 void EstadoBateria(void)
 {
+extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 	static int estado = 0;
 	int i;
 	static char msg[LEN_BUF];
@@ -68,6 +72,8 @@ void EstadoBateria(void)
 			else
 			{
 				//SYSTEM_Perform_Safe_Shutdown();
+
+				ESTADO_GLOBAL.Modo = BATERIABAJA;
 			}
 			estado++;
 

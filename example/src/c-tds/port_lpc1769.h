@@ -24,8 +24,7 @@
 #define LED_OFF	(false)
 
 // Allows NO or NC switch to be used (or other wiring variations)
-#define SW_PRESSED		(false)
-#define SW_NOT_PRESSED	(true)
+
 #define ABIERTA 0
 #define CERRADA 1
 #define ALTO 1

@@ -7,7 +7,7 @@
     See system_lpc1769.c for details.
 
 -*---------------//---------------------------------------------------*/
-
+#include "../main/main.h"
 
 #ifndef _SYSTEM_H
 #define _SYSTEM_H 1
@@ -49,17 +49,23 @@ typedef enum {FAIL_SILENT, NORMAL, FAULT_TASK_TIMING} eSystem_mode;
 
 
 // ------ Public data type declarations ----------------------------
-#define WORKING 0
-#define READING 1
+#define RESET 0
+#define BTH 1
+#define BATERIABAJA 2
+#define SENSORES 3
 
 typedef struct{
-uint32_t Estado;
+uint32_t Modo;
+uint32_t Cantidad_Golpes;
+uint32_t Primer_Inicio;
 } ESTADO_GLOBAL_DEF;
 // ------ Public function prototypes -------------------------------
 void SYSTEM_Init(void);
 void SYSTEM_Perform_Safe_Shutdown(void);
 void SYSTEM_Change_Mode_Fault(eSystem_mode mode);
 eSystem_mode SYSTEM_Get_Mode(void);
+void Switcheo_Lista (void);
+void Borro_Lista (void);
 
 
 #endif

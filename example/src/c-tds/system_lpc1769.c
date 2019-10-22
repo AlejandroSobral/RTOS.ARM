@@ -21,6 +21,9 @@
 #include "../tasks/BatteryLife.h"
 #include "../tasks/logger.h"
 #include "../tasks/24LC256.h"
+#include "../tasks/SwitchReset.h"
+#include "../tasks/SwitchModo.h"
+#include "../c-tds/scheduler_lpc1769.h"
 
 
 
@@ -29,6 +32,7 @@
 // - we therefore make this variable public.
 eSystem_mode System_mode_G;
 ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
+uint32_t Switchea_lista_flag;
 
 
 // ------ Private function declarations ----------------------------
@@ -90,6 +94,7 @@ void SYSTEM_Identify_Required_Mode(void)
 -*------------------------------------------------------------------*/
 void SYSTEM_Configure_Required_Mode(void)
 {
+
 	Chip_SetupXtalClocking();
 
 	/* Setup FLASH access to 4 clocks (100MHz clock) */
@@ -116,22 +121,27 @@ void SYSTEM_Configure_Required_Mode(void)
 
         case NORMAL:
         {
+        	ESTADO_GLOBAL.Modo = RESET;
         	// Set up scheduler for 1 ms ticks (tick interval in *ms*)
             SCH_Init(10);
-
             /* Initialize WWDT and event router */
         	Chip_WWDT_Init(LPC_WWDT);
-
             // Set up WDT (timeout in *microseconds*)
             WATCHDOG_Init(WatchDog_RateuS);
-
         	HEARTBEAT_Init();
         	GPIO_DHT11_Init();
         	Timer1_Init();
         	Acelerometro_Init();
         	ADC0_Init();
         	UartMonitor_Init();
-        	//init_memoriai2c();
+        	Switch_Reset_Init();
+        	Switch_MODO_Init();
+
+        	ESTADO_GLOBAL.Modo = RESET; // ACA INICIA
+			//#define RESET 0
+			//#define BTH 1
+			//#define BATERIABAJA 2
+			//#define SENSORES 3
 
         	// Add tasks to schedule.
             // Parameters are:
@@ -141,35 +151,17 @@ void SYSTEM_Configure_Required_Mode(void)
             // 4. Task WCET (in microseconds)
             // 5. Task BCET (in microseconds)
 
-        	switch(ESTADO_GLOBAL.Estado){ // SELECCIONO LA LISTA DE TAREAS
-        	case WORKING:
-			break;
-        	case READING:
-			break;
+        	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
+        	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
+        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+
+
+
+        	 break;
         	}
-
-
-            // Add watchdog task first
-        	 SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
-        	 SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
-        	 SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
-        	 SCH_Add_Task( Acelerometro_Update,  1, 2, 80000, 0);
-        	 SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
-        	 //SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
-        	 SCH_Add_Task( Logger,  1, 2, 20000, 0);
-        	 SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
-        	 SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
-
-
-
-
-
-
-
-            break;
         }
 	}
-}
+
 
 
 /*------------------------------------------------------------------*-
@@ -217,6 +209,73 @@ eSystem_mode SYSTEM_Get_Mode(void)
 {
 	return System_mode_G;
 }
+
+void Switcheo_Lista (void)
+{
+extern uint32_t Switchea_lista_flag;
+	if (Switchea_lista_flag)
+	{
+		Borro_lista();
+		Switchea_lista_flag = 0;
+
+
+
+
+	       	switch(ESTADO_GLOBAL.Modo)
+	       	{ // SELECCIONO LA LISTA DE TAREAS
+        	case RESET:
+        	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
+        	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
+        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+
+			break;
+        	case BTH:
+        	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
+        	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
+        	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
+        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+			break;
+        	case BATERIABAJA:
+        	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
+        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	// ACA VA LO DE FACU
+        	break;
+        	case SENSORES:
+           SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
+           SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
+           SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
+           SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
+           SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
+           SCH_Add_Task( Acelerometro_Update,  1, 2, 80000, 0);
+           SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
+           SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
+           SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
+           SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
+           SCH_Add_Task( Logger,  1, 2, 20000, 0);
+           SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+           break;
+	       	}
+	}
+
+}
+
+void Borro_lista (void)
+{
+extern sTask SCH_tasks_G[SCH_MAX_TASKS];
+extern uint32_t Task_Index_Total;
+uint32_t i;
+
+	for( i=0; i<Task_Index_Total ; i ++)
+	{
+	 SCH_tasks_G[i].pTask = 0;
+	 SCH_tasks_G[i].Delay = 0;
+	 SCH_tasks_G[i].Period = 0;
+	 SCH_tasks_G[i].WCET = 0;
+	 SCH_tasks_G[i].BCET = 0;
+	}
+}
+
+
 
 
 /*------------------------------------------------------------------*-

@@ -19,6 +19,7 @@
 // May be used (for example) to report faults using Heartbeat LED
 // See Heartbeat task (if used) for basic fault-reporting mechanism
 uint32_t Fault_code_G;
+uint32_t Task_Index_Total;
 
 
 // ------ Private variable definitions -----------------------------
@@ -409,10 +410,12 @@ uint32_t SCH_Add_Task(void (* pTask)(),
     uint32_t Return_value = 0;
     uint32_t Index = 0;
 
+
     // First find a gap in the array (if there is one)
     while ((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS))
         {
         Index++;
+
     }
 
     // Have we reached the end of the list?
@@ -451,6 +454,7 @@ uint32_t SCH_Add_Task(void (* pTask)(),
         SCH_tasks_G[Index].BCET = BCET;
 
         Return_value = Index;
+        Task_Index_Total = Index;
         }
 
     return Return_value;
