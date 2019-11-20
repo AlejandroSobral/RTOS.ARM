@@ -250,10 +250,69 @@ void PreparaPaginaDos (void) // Orientacion, H&T
 }
 
 
-void PreparaPaginaTres (void){
+void PreparaPaginaTres (void) //Del GPS: Hora y Latitud
+{
+	dataTX[0]= hora[0];
+	dataTX[1]= hora[1];
+	dataTX[2]= hora[2];
+	dataTX[3]= hora[3];
+	dataTX[4]= hora[4];
+	dataTX[5]= hora[5];
+	dataTX[6]= hora[6];
+	dataTX[7]= hora[7];
+	dataTX[8]= hora[8];
+	dataTX[9]= hora[9];
+	dataTX[10]= latitud[0];
+	dataTX[11]= latitud[1];
+	dataTX[12]= latitud[2];
+	dataTX[13]= latitud[3];
+	dataTX[14]= latitud[4];
+	dataTX[15]= latitud[5];
+	dataTX[16]= latitud[6];
+	dataTX[17]= latitud[7];
+	dataTX[18]= latitud[8];
+	dataTX[19]= latitud[9];
+	dataTX[20]= latitud[10];
+	dataTX[21]= latitud[11];
+	dataTX[22]= latitud[12];
+	dataTX[23]= latitud[13];
+	dataTX[24]= latitud[14];
+	dataTX[25]= latitud[15];
+	dataTX[26]= latitud[16];
+	dataTX[27]= latitud[17];
 
 }
 
 
-
+void PreparaPaginaCuatro (void) //Del GPS: Fecha y Longitud
+{
+	dataTX[0]= fecha[0];
+	dataTX[1]= fecha[1];
+	dataTX[2]= fecha[2];
+	dataTX[3]= fecha[3];
+	dataTX[4]= fecha[4];
+	dataTX[5]= fecha[5];
+	dataTX[6]= fecha[6];
+	dataTX[7]= fecha[7];
+	dataTX[8]= fecha[8];
+	dataTX[9]= fecha[9];
+	dataTX[10]= longitud[0];
+	dataTX[11]= longitud[1];
+	dataTX[12]= longitud[2];
+	dataTX[13]= longitud[3];
+	dataTX[14]= longitud[4];
+	dataTX[15]= longitud[5];
+	dataTX[16]= longitud[6];
+	dataTX[17]= longitud[7];
+	dataTX[18]= longitud[8];
+	dataTX[19]= longitud[9];
+	dataTX[20]= longitud[10];
+	dataTX[21]= longitud[11];
+	dataTX[22]= longitud[12];
+	dataTX[23]= longitud[13];
+	dataTX[24]= longitud[14];
+	dataTX[25]= longitud[15];
+	dataTX[26]= longitud[16];
+	dataTX[27]= longitud[17];
+}
 
