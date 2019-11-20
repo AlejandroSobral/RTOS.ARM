@@ -10,7 +10,7 @@
 #include "chip.h"
 #include <stdio.h> //
 #include <math.h>
-#include "C:\Users\Alejandro\git2\lpc_chip_175x_6x\inc\eeprom_17xx_40xx.h"
+//#include "C:\Users\Alejandro\git2\lpc_chip_175x_6x\inc\eeprom_17xx_40xx.h"
 
 //FlagUmbral[i]
 //0 = AceleracionAngular
@@ -270,6 +270,9 @@ void PreparaPaginaDos (void) // Orientacion, H&T
 
 void PreparaPaginaTres (void) //Del GPS: Hora y Latitud
 {
+	extern char hora[10];
+	extern char latitud[18];
+
 	dataTX[0]= hora[0];
 	dataTX[1]= hora[1];
 	dataTX[2]= hora[2];
@@ -304,6 +307,9 @@ void PreparaPaginaTres (void) //Del GPS: Hora y Latitud
 
 void PreparaPaginaCuatro (void) //Del GPS: Fecha y Longitud
 {
+	extern char longitud[18];
+	extern char fecha[10];
+
 	dataTX[0]= fecha[0];
 	dataTX[1]= fecha[1];
 	dataTX[2]= fecha[2];
