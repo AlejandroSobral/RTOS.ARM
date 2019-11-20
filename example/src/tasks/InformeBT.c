@@ -10,6 +10,7 @@
 #include "chip.h"
 #include <stdio.h> //
 #include <math.h>
+#include "InformeBT.h"
 
 
 
@@ -48,49 +49,19 @@ void InformeBT(void)
 				else
 				{
 
-						static int ix = 0;
-						if(estado==1)
-						{
-							Chip_UART_Send(LPC_UART1, &fecha[ix], 1);
-							ix++;
-							if(!fecha[ix])
-							{
-								ix = 0;
-								estado = 2;
-							}
-						}
-						if(estado==2)
-						{
-							Chip_UART_Send(LPC_UART1, &hora[ix], 1);
-							ix++;
-							if(!hora[ix])
-							{
-								ix = 0;
-								estado = 3;
-							}
-						}
-						if(estado==3)
-						{
-							Chip_UART_Send(LPC_UART1, &latitud[ix], 1);
-							ix++;
-							if(!latitud[ix])
-							{
-								ix = 0;
-								estado = 4;
-							}
-						}
-						if(estado==4)
-						{
-							Chip_UART_Send(LPC_UART1, &longitud[ix], 1);
-							ix++;
-							if(!longitud[ix])
-							{
-								ix = 0;
-								estado = 0;
-							}
-						}
+//						static int ix = 0;
+//						if(estado==1)
+//						{
+//							Chip_UART_Send(LPC_UART1, &fecha[ix], 1);
+//							ix++;
+//							if(!fecha[ix])
+//							{
+//								ix = 0;
+//								estado = 2;
+//							}
+//						}
 
-					}
+
 
 
 
