@@ -107,7 +107,7 @@ extern struct_dataRXeeprom dataRXeeprom_Read[4];
 extern uint32_t IndicePagLeida_Read;
 
 
-if(UltimaMemoriaLeida > (MaxPos)) UltimaMemoriaLeida = 0; //Roll-over de memoria
+if(UltimaMemoriaLeida > (MaxPos)){ UltimaMemoriaLeida = 0;} //Roll-over de memoria
 
 
 	if(UltimaMemoriaLeida > UltimaMemoriaGrabada)

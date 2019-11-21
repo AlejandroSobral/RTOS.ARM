@@ -215,7 +215,7 @@ eSystem_mode SYSTEM_Get_Mode(void)
 void Switcheo_Lista (void)
 {
 extern uint32_t Switchea_lista_flag;
-extern uint32_t cantidad_golpes;
+
 	if (Switchea_lista_flag)
 	{
 		Borro_lista();

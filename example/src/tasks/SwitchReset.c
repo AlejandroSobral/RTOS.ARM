@@ -43,7 +43,11 @@ if(toggle)
 	else
 	{
 		Sw_switch_Reset_state = SW_NOT_PRESSED; //
-		if(ESTADO_GLOBAL.Modo != SENSORES) Switchea_lista_flag = 1;
+		if(ESTADO_GLOBAL.Modo != SENSORES)
+			{Switchea_lista_flag = 1;
+			}
+
+
 		ESTADO_GLOBAL.Modo = SENSORES;
 
 	}

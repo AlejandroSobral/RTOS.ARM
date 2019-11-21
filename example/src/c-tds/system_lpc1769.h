@@ -65,7 +65,7 @@ void SYSTEM_Perform_Safe_Shutdown(void);
 void SYSTEM_Change_Mode_Fault(eSystem_mode mode);
 eSystem_mode SYSTEM_Get_Mode(void);
 void Switcheo_Lista (void);
-void Borro_Lista (void);
+void Borro_lista (void);
 
 
 #endif
