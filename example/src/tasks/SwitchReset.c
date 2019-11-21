@@ -9,6 +9,7 @@
 static uint8_t Sw_switch_Reset_state;
 static uint8_t switch_input_reset;
 extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
+extern uint32_t cantidad_golpes;
 void Switch_Reset(void)
 {
 

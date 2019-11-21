@@ -26,7 +26,7 @@ static uint8_t dataTX[TamPag];
 I2C_STATUS_T i2c_state;
 static uint32_t UltimaMemoriaGrabada;
 static uint32_t UltimaMemoriaLeida;
-static struct_dataRXeeprom dataRXeeprom_Read[3];
+static struct_dataRXeeprom dataRXeeprom_Read[4];
 static uint32_t IndicePagLeida_Read;
 
 extern struct_acelerometro DataAcelerometro;
@@ -82,6 +82,13 @@ static uint32_t IndicePagina;
 			PreparaPaginaTres(); // GPS
 			i2c_state = Write_24LC(dataTX, UltimaMemoriaGrabada);
 			if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaGrabada+=TamPag;}
+			IndicePagina++;
+			break;
+			case 3:
+			LimpiaBuff(dataTX);
+			PreparaPaginaTres(); // GPS
+			i2c_state = Write_24LC(dataTX, UltimaMemoriaGrabada);
+			if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaGrabada+=TamPag;}
 			IndicePagina = 0;
 			break;
 				//LeePaginaI2c(dataRX,MSB, LSB);
@@ -96,8 +103,12 @@ static uint32_t IndicePagina;
 
 void Ciclo_Memoria_Reading (void){
 
-extern struct_dataRXeeprom dataRXeeprom_Read[3];
+extern struct_dataRXeeprom dataRXeeprom_Read[4];
 extern uint32_t IndicePagLeida_Read;
+
+
+if(UltimaMemoriaLeida > (MaxPos)) UltimaMemoriaLeida = 0; //Roll-over de memoria
+
 
 	if(UltimaMemoriaLeida > UltimaMemoriaGrabada)
 			{
@@ -126,6 +137,13 @@ extern uint32_t IndicePagLeida_Read;
 	IndicePagLeida_Read++;
 	break;
 	case 2:
+	i2c_state = 0;
+	LimpiaBuff(BufferRXEeprom);
+	i2c_state = Read_24LC(dataRXeeprom_Read[IndicePagLeida_Read].dataRX, UltimaMemoriaLeida);
+	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
+	IndicePagLeida_Read++;
+	break;
+	case 3:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
 	i2c_state = Read_24LC(dataRXeeprom_Read[IndicePagLeida_Read].dataRX, UltimaMemoriaLeida);
