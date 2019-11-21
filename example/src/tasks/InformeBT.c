@@ -10,11 +10,12 @@
 #include "chip.h"
 #include <stdio.h> //
 #include <math.h>
-#include "C:\Users\Alejandro\git2\lpc_chip_175x_6x\inc\eeprom_17xx_40xx.h"
+
 
 
 void InformeBT(void)
 {
+	extern uint32_t cantidad_golpes, primer_inicio;
 	int i;
 	static char cadena[LEN_BUF];
 	memset(cadena,0,LEN_BUF);
@@ -35,7 +36,7 @@ void InformeBT(void)
 			}
 			else
 			{
-				if(!cant_golpes)
+				if(!cantidad_golpes)
 				{
 					sprintf(cadena,"Viaje exitoso! No hubo golpes.\r\n");
 					if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))

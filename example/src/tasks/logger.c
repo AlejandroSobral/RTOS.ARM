@@ -19,6 +19,7 @@
 //5=Bateria
 
 uint32_t FlagUmbral[NMROFLAGS];
+uint32_t cantidad_golpes;
 
 void Logger (void)
 {
@@ -69,6 +70,7 @@ if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagU
 		{//GRABA EN LA MEMORIA
 
 		Grabado = 1;
+		cantidad_golpes++;
 		}
 
 if(Grabado && Enviado){

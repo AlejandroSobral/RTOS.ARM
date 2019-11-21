@@ -35,6 +35,7 @@ if(toggle)
 		Sw_switch_Reset_state = SW_PRESSED;
 		ESTADO_GLOBAL.Modo = RESET;
 		Switchea_lista_flag = 1;
+		cantidad_golpes = 0;
 
 		}
 	}

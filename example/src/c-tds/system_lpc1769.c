@@ -33,6 +33,7 @@
 eSystem_mode System_mode_G;
 ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 uint32_t Switchea_lista_flag;
+uint32_t primer_inicio;
 
 
 // ------ Private function declarations ----------------------------
@@ -138,6 +139,7 @@ void SYSTEM_Configure_Required_Mode(void)
         	Switch_MODO_Init();
 
         	ESTADO_GLOBAL.Modo = RESET; // ACA INICIA
+        	primer_inicio = 0;
 			//#define RESET 0
 			//#define BTH 1
 			//#define BATERIABAJA 2
@@ -213,6 +215,7 @@ eSystem_mode SYSTEM_Get_Mode(void)
 void Switcheo_Lista (void)
 {
 extern uint32_t Switchea_lista_flag;
+extern uint32_t cantidad_golpes;
 	if (Switchea_lista_flag)
 	{
 		Borro_lista();
@@ -224,23 +227,40 @@ extern uint32_t Switchea_lista_flag;
 	       	switch(ESTADO_GLOBAL.Modo)
 	       	{ // SELECCIONO LA LISTA DE TAREAS
         	case RESET:
+        	// Enable SysTick timer
+            SysTick->CTRL |= 0x01;
+            SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	primer_inicio = 0;
+
 
 			break;
         	case BTH:
+        	// Enable SysTick timer
+            SysTick->CTRL |= 0x01;
+            SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	//ACA TENGO QUE LEVANTAR LA LISTA DE DATOS GRABADA
 			break;
         	case BATERIABAJA:
+        	// Enable SysTick timer
+            SysTick->CTRL |= 0x01;
+            SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
         	// ACA VA LO DE FACU
+        	//ACA GRABO LOS TODO Y ME SUICIDO
         	break;
         	case SENSORES:
+        // Enable SysTick timer
+           SysTick->CTRL |= 0x01;
+           SysTick->CTRL |= 0x02;
+           primer_inicio = 1; //Este flag me sirve para saber si alguna vez entré en este estado
            SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
            SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
            SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
@@ -253,6 +273,7 @@ extern uint32_t Switchea_lista_flag;
            SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
            SCH_Add_Task( Logger,  1, 2, 20000, 0);
            SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+
            break;
 	       	}
 	}
@@ -265,6 +286,13 @@ extern sTask SCH_tasks_G[SCH_MAX_TASKS];
 extern uint32_t Task_Index_Total;
 uint32_t i;
 
+ //FRENO SYSTICK, ALIMENTO WATCHDOG, BORRO, CARGO Y PRENDO SYSTICK
+    // Disable SysTick timer, interrupt.
+    SysTick->CTRL |= 0x00;
+    WATCHDOG_Update();
+
+
+//WATCHDOG y GOGO
 	for( i=0; i<Task_Index_Total ; i ++)
 	{
 	 SCH_tasks_G[i].pTask = 0;
