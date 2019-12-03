@@ -73,7 +73,8 @@ extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 			{
 				//SYSTEM_Perform_Safe_Shutdown();
 
-				ESTADO_GLOBAL.Modo = BATERIABAJA;
+				//ESTADO_GLOBAL.Modo = BATERIABAJA;
+				//Switchea_lista_flag = 1;
 			}
 			estado++;
 

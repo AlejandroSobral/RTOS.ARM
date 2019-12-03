@@ -2,11 +2,11 @@
 #ifndef _LOGGER_H
 #define _LOGGER_H 1
 
-#define MaximaAceleracionGravitacional 1300 // m/s * 100
+#define MaximaAceleracionGravitacional 1300 // m/s * 100 = 1,3G
 #define MaximaAceleracionAngular 125 // º/s
 #define MaximaInclinacionXY 40 // º
-#define MaximaHumedad 40 // %
-#define MaximaTemperatura 25 // ºC
+#define MaximaHumedad 60 // %
+#define MaximaTemperatura 30 // ºC
 #define XYZBuf 3
 #define XYBuf 2
 #define NMROFLAGS 6

@@ -14,35 +14,38 @@ void Switch_MODO(void)
 {
 
 static uint8_t antirrebote_veces;
-static uint8_t toggle;
+static uint8_t toggle_modo;
 static uint8_t contador_toggle;
 extern uint32_t Switchea_lista_flag;
 
-if(toggle)
+if(toggle_modo)
 {contador_toggle++;
 	if(contador_toggle >= 1)
-		{toggle=0; contador_toggle=0;}
+		{toggle_modo=0; contador_toggle=0;}
 }
 	// Read TEST_GPIO_SWITCH.
 	switch_input_MODO = Chip_GPIO_ReadPortBit(LPC_GPIO, MODO_SWITCH_PORT, MODO_SWITCH_PIN);
 
 
-	if (switch_input_MODO == SW_PRESSED && toggle == 0)
+	if (switch_input_MODO == SW_PRESSED && toggle_modo == 0)
 	{	antirrebote_veces++;
 		if(antirrebote_veces >= 1){ //ANTIRREBOTE OK
-			toggle = 1;
+			toggle_modo = 1;
     	antirrebote_veces = 0; // REINICIO EL CONTADOR
 
 		Sw_switch_MODO_state = SW_PRESSED;
+		ESTADO_GLOBAL.ModoPrevio = ESTADO_GLOBAL.Modo;
 		ESTADO_GLOBAL.Modo = BTH;
 		Switchea_lista_flag = 1;
+
 		}
 	}
 	else
 	{
 		Sw_switch_MODO_state = SW_NOT_PRESSED; //
-		if(ESTADO_GLOBAL.Modo != SENSORES)
+		if(ESTADO_GLOBAL.Modo == BTH && Sw_switch_MODO_state == SW_NOT_PRESSED)
 			{Switchea_lista_flag = 1;
+
 			}
 
 		ESTADO_GLOBAL.Modo = SENSORES;

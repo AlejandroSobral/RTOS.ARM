@@ -253,6 +253,7 @@ extern uint32_t Switchea_lista_flag;
             SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
         	// ACA VA LO DE FACU
         	//ACA GRABO LOS TODO Y ME SUICIDO
         	break;

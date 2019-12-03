@@ -34,6 +34,7 @@ if(toggle)
     	antirrebote_veces = 0; // REINICIO EL CONTADOR
 
 		Sw_switch_Reset_state = SW_PRESSED;
+		ESTADO_GLOBAL.ModoPrevio = ESTADO_GLOBAL.Modo;
 		ESTADO_GLOBAL.Modo = RESET;
 		Switchea_lista_flag = 1;
 		cantidad_golpes = 0;
@@ -43,8 +44,9 @@ if(toggle)
 	else
 	{
 		Sw_switch_Reset_state = SW_NOT_PRESSED; //
-		if(ESTADO_GLOBAL.Modo != SENSORES)
+		if(ESTADO_GLOBAL.Modo == RESET && Sw_switch_Reset_state == SW_NOT_PRESSED )
 			{Switchea_lista_flag = 1;
+			antirrebote_veces = antirrebote_veces;
 			}
 
 

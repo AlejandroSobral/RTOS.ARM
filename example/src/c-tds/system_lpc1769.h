@@ -58,6 +58,7 @@ typedef struct{
 uint32_t Modo;
 uint32_t Cantidad_Golpes;
 uint32_t Primer_Inicio;
+uint32_t ModoPrevio;
 } ESTADO_GLOBAL_DEF;
 // ------ Public function prototypes -------------------------------
 void SYSTEM_Init(void);

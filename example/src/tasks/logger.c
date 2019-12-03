@@ -68,7 +68,7 @@ void Logger (void)
 if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagUmbral[4]==1)
 
 		{//GRABA EN LA MEMORIA
-
+		Ciclo_Memoria_Working();
 		Grabado = 1;
 		cantidad_golpes++;
 		}
