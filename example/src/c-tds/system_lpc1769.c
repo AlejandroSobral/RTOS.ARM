@@ -269,10 +269,10 @@ extern uint32_t Switchea_lista_flag;
            SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
            SCH_Add_Task( Acelerometro_Update,  1, 2, 80000, 0);
            SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
-           SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
-           SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
-           SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
-           SCH_Add_Task( Logger,  1, 2, 20000, 0);
+//           SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
+//           SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
+//           SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
+           SCH_Add_Task( Logger,  1, 2, 200000, 0);
            SCH_Add_Task(Switcheo_Lista,0,1,250,0);
 
            break;

@@ -3,6 +3,7 @@
 #include "UartMonitor.h"
 #include "acelerometro.h"
 #include "dht11.h"
+#include "24LC256.h"
 #include "../main/main.h"
 #include "string.h"
 #include "../c-tds/port_Lpc1769.h"
@@ -17,6 +18,7 @@
 //3= Humedad
 //4= Temperatura
 //5=Bateria
+//6 = Dado vuelta
 
 uint32_t FlagUmbral[NMROFLAGS];
 uint32_t cantidad_golpes;
@@ -25,32 +27,36 @@ void Logger (void)
 {
 	extern struct_acelerometro DataAcelerometro;
 	extern struct_sensores STRUCT_SENSOR;
-	extern uint32_t Grabado, Enviado;
+	extern uint32_t Grabado;
+	uint32_t DatoAcelerometro_Orientacion;
+	uint32_t DatoAcelerometro_AceleracionAngular;
+
 
 	uint32_t i = 0;
 
 
 
 	for(i = 0; i<XYZBuf ; i++)
-	{
-		if(DataAcelerometro.FloatAceleracionAngular[i] > MaximaAceleracionGravitacional)
+	{	 DatoAcelerometro_AceleracionAngular = DataAcelerometro.FloatAceleracionAngular[i];
+		if(DatoAcelerometro_AceleracionAngular > MaximaAceleracionAngular)
 		{
 			FlagUmbral[0] = 1;
 		}
 
-		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionAngular )
+		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional  || DataAcelerometro.FloatAceleracion[i] < -9100 )//Esto es porque esta dado vuelta )
 		{
 			FlagUmbral[1] = 1;
 		}
 	}
 
 	for(i = 0; i<XYBuf ; i++)
-	{
-		if(DataAcelerometro.Orientacion[i] > MaximaInclinacionXY)
+	{DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
+		if(DatoAcelerometro_Orientacion > 55)
 			{
 				FlagUmbral[2] = 1;
 
 			}
+	}
 		if(STRUCT_SENSOR.Valor_Humedad > MaximaHumedad)
 		{
 		FlagUmbral[3] = 1;
@@ -61,11 +67,11 @@ void Logger (void)
 		FlagUmbral[4] = 1;
 
 		}
-	}
+
 
 
 	//ACÁ ES DONDE GRABA LOS DATOS EN LA MEMORIA
-if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagUmbral[4]==1)
+if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagUmbral[4]==1||FlagUmbral[6]==1)
 
 		{//GRABA EN LA MEMORIA
 		Ciclo_Memoria_Working();
@@ -73,10 +79,10 @@ if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagU
 		cantidad_golpes++;
 		}
 
-if(Grabado && Enviado){
+if(Grabado){// && Enviado){
 
-	FlagUmbral[0]=0;FlagUmbral[1]=0;FlagUmbral[2]=0;FlagUmbral[3]=0;FlagUmbral[4]=0;FlagUmbral[5]=0;
+	FlagUmbral[0]=0;FlagUmbral[1]=0;FlagUmbral[2]=0;FlagUmbral[3]=0;FlagUmbral[4]=0;FlagUmbral[5]=0; FlagUmbral[6]=0;
 	Grabado = 0;
-	Enviado = 0;
+	//Enviado = 0;
 	}
 }

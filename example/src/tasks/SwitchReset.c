@@ -36,7 +36,10 @@ if(toggle)
 		Sw_switch_Reset_state = SW_PRESSED;
 		ESTADO_GLOBAL.ModoPrevio = ESTADO_GLOBAL.Modo;
 		ESTADO_GLOBAL.Modo = RESET;
-		Switchea_lista_flag = 1;
+		if(ESTADO_GLOBAL.Modo != ESTADO_GLOBAL.ModoPrevio)
+					{
+					Switchea_lista_flag = 1;
+					}
 		cantidad_golpes = 0;
 
 		}
@@ -49,8 +52,9 @@ if(toggle)
 			antirrebote_veces = antirrebote_veces;
 			}
 
-
+		if(ESTADO_GLOBAL.Modo!= BTH){ // SI ESTOY TX BTH, IGNORO ESTO
 		ESTADO_GLOBAL.Modo = SENSORES;
+		}
 
 	}
 

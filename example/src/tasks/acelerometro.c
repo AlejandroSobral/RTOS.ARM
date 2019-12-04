@@ -97,7 +97,11 @@ extern uint32_t FlagUmbral[6];
 
 					if(DataAcelerometro.FloatAceleracion[0]<0)DataAcelerometro.FloatAceleracion[0] = -DataAcelerometro.FloatAceleracion[0];
 					if(DataAcelerometro.FloatAceleracion[1]<0)DataAcelerometro.FloatAceleracion[1] = -DataAcelerometro.FloatAceleracion[1];
-					if(DataAcelerometro.FloatAceleracion[2]<0)DataAcelerometro.FloatAceleracion[2] = -DataAcelerometro.FloatAceleracion[2];
+					if(DataAcelerometro.FloatAceleracion[2]<0){
+						if(DataAcelerometro.FloatAceleracion[2] < -5000) FlagUmbral[6] = 1; // ESTA DADO VUELTA!
+						DataAcelerometro.FloatAceleracion[2] = -DataAcelerometro.FloatAceleracion[2];
+
+					}
 
 
 
@@ -129,7 +133,6 @@ extern uint32_t FlagUmbral[6];
 			        if(DataAcelerometro.FloatAceleracionAngular[1]<0)DataAcelerometro.FloatAceleracionAngular[1] = -DataAcelerometro.FloatAceleracionAngular[1];
 			        if(DataAcelerometro.FloatAceleracionAngular[2]<0){
 			        	DataAcelerometro.FloatAceleracionAngular[2] = -DataAcelerometro.FloatAceleracionAngular[2];
-			        	FlagUmbral[2] = 1; // INVERTIDO 180º
 
 			        }
 

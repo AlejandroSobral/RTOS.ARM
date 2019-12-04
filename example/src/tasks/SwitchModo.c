@@ -35,9 +35,16 @@ if(toggle_modo)
 
 		Sw_switch_MODO_state = SW_PRESSED;
 		ESTADO_GLOBAL.ModoPrevio = ESTADO_GLOBAL.Modo;
-		ESTADO_GLOBAL.Modo = BTH;
-		Switchea_lista_flag = 1;
+		if(ESTADO_GLOBAL.Modo == RESET)
+		{
+		ESTADO_GLOBAL.Modo = ESTADO_GLOBAL.ModoPrevio; //EL RESET TIENE PRIORIDAD
+		}
+		else ESTADO_GLOBAL.Modo = BTH;
 
+		if(ESTADO_GLOBAL.Modo != ESTADO_GLOBAL.ModoPrevio)
+					{
+					Switchea_lista_flag = 1;
+					}
 		}
 	}
 	else
@@ -47,8 +54,8 @@ if(toggle_modo)
 			{Switchea_lista_flag = 1;
 
 			}
-
-		ESTADO_GLOBAL.Modo = SENSORES;
+		if(ESTADO_GLOBAL.Modo!=RESET){ // si esta en RESET, este tiene prioridad
+		ESTADO_GLOBAL.Modo = SENSORES;}
 
 	}
 
