@@ -44,7 +44,7 @@ void Logger (void)
 			FlagUmbral[0] = 1; //giro brusco
 		}
 
-		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)//Esto es porque esta dado vuelta )
+		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)
 		{
 			FlagUmbral[1] = 1; // Golpe
 		}
