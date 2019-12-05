@@ -13,7 +13,7 @@
 #include "InformeBT.h"
 
 
-void InformeBT(void){
+void InformeBT(void){ //ASDSAD
 
 extern uint32_t cantidad_golpes, primer_inicio;
 uint32_t i = 0;
