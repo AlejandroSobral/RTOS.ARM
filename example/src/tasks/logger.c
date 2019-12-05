@@ -31,8 +31,6 @@ void Logger (void)
 	extern uint32_t Grabado;
 	int DatoAcelerometro_Orientacion;
 	uint32_t DatoAcelerometro_AceleracionAngular;
-	float Int_AceleracionZNeg = -8700;
-	float Int_AceleracionZPos = 5000;
 
 
 	uint32_t i = 0;
@@ -54,11 +52,15 @@ void Logger (void)
 
 	for(i = 0; i<XYBuf ; i++)
 	{DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
-		if(DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55 )
+		if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55) && (DataAcelerometro.FloatAceleracion[0] > 3500 || DataAcelerometro.FloatAceleracion[1] > 3500 || DataAcelerometro.FloatAceleracion[2] < 0))
 			{
-				FlagUmbral[2] = 1; //Inclinado
+				FlagUmbral[1] = 1; //Es un golpe y no una inclinacion
 
 			}
+		if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55) && (DataAcelerometro.FloatAceleracion[0] < 2000 || DataAcelerometro.FloatAceleracion[1] < 2000 || DataAcelerometro.FloatAceleracion[2] < 3000))
+		{
+			FlagUmbral[2] = 1; // Es inclinacion
+		}
 	}
 		if(STRUCT_SENSOR.Valor_Humedad > MaximaHumedad)
 		{
@@ -76,7 +78,7 @@ void Logger (void)
 		if(DataAcelerometro.FloatAceleracion[2] < 0)//Una porcion de G
 				{
 					aux_invertido++;
-					if(aux_invertido == 100){ // ASUMO QUE ESTA VOLTEADO Y NO FUE UN SOLO GOLPE
+					if(aux_invertido == 100){ // ASUMO QUE ESTA VOLTEADO Y NO FUE UN SOLO GOLPE; 1 SEG APROX
 					FlagUmbral[6] = 1;
 					aux_invertido=0; //reseteo
 					}
