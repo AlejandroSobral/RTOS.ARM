@@ -22,38 +22,41 @@
 
 uint32_t FlagUmbral[NMROFLAGS];
 uint32_t cantidad_golpes;
+static uint32_t aux_invertido;
 
 void Logger (void)
 {
 	extern struct_acelerometro DataAcelerometro;
 	extern struct_sensores STRUCT_SENSOR;
 	extern uint32_t Grabado;
-	uint32_t DatoAcelerometro_Orientacion;
+	int DatoAcelerometro_Orientacion;
 	uint32_t DatoAcelerometro_AceleracionAngular;
+	float Int_AceleracionZNeg = -8700;
+	float Int_AceleracionZPos = 5000;
 
 
 	uint32_t i = 0;
 
 
 
-	for(i = 0; i<XYZBuf ; i++)
+	for(i = 0; i<XYZBuf ; i++) // Z va por otro lado
 	{	 DatoAcelerometro_AceleracionAngular = DataAcelerometro.FloatAceleracionAngular[i];
 		if(DatoAcelerometro_AceleracionAngular > MaximaAceleracionAngular)
 		{
-			FlagUmbral[0] = 1;
+			FlagUmbral[0] = 1; //giro brusco
 		}
 
-		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional  || DataAcelerometro.FloatAceleracion[i] < -9100 )//Esto es porque esta dado vuelta )
+		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)//Esto es porque esta dado vuelta )
 		{
-			FlagUmbral[1] = 1;
+			FlagUmbral[1] = 1; // Golpe
 		}
 	}
 
 	for(i = 0; i<XYBuf ; i++)
 	{DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
-		if(DatoAcelerometro_Orientacion > 55)
+		if(DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55 )
 			{
-				FlagUmbral[2] = 1;
+				FlagUmbral[2] = 1; //Inclinado
 
 			}
 	}
@@ -66,6 +69,26 @@ void Logger (void)
 		{
 		FlagUmbral[4] = 1;
 
+		}
+
+		//ANALISIS SI ESTA VOLTEADO completamente
+
+		if(DataAcelerometro.FloatAceleracion[2] < 0)//Una porcion de G
+				{
+					aux_invertido++;
+					if(aux_invertido == 100){ // ASUMO QUE ESTA VOLTEADO Y NO FUE UN SOLO GOLPE
+					FlagUmbral[6] = 1;
+					aux_invertido=0; //reseteo
+					}
+
+				}
+
+		if(DataAcelerometro.FloatAceleracion[2] > 0 && aux_invertido > 0)
+		{
+			if(aux_invertido < 3){
+				aux_invertido = 0;
+				FlagUmbral[1] = 1; // FUE UN GOLPE
+			}
 		}
 
 

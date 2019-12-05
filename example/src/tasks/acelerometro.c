@@ -39,10 +39,10 @@ void Acelerometro_Init (void){
 	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
 	memset(buf,0,sizeof(uint8_t)*LEN_BUF);
 	buf[0]=0x1C; //Acá configuró el acelerómetro
-	buf[1]=0x00; //2g maxima escala
+	buf[1]=0x010; //8g maxima escala
 	memset(buf,0,sizeof(uint8_t)*LEN_BUF);
-		buf[0]=0x1B; //Acá configuró el giróscopo 250g/s
-		buf[1]=0x00;
+		buf[0]=0x1B; //Acá configuró el giróscopo 1000g/s
+		buf[1]=0x10;
 
 	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
 
@@ -95,13 +95,12 @@ extern uint32_t FlagUmbral[6];
 					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]*Gravedad;
 					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]/16384;
 
+
+
 					if(DataAcelerometro.FloatAceleracion[0]<0)DataAcelerometro.FloatAceleracion[0] = -DataAcelerometro.FloatAceleracion[0];
 					if(DataAcelerometro.FloatAceleracion[1]<0)DataAcelerometro.FloatAceleracion[1] = -DataAcelerometro.FloatAceleracion[1];
-					if(DataAcelerometro.FloatAceleracion[2]<0){
-						if(DataAcelerometro.FloatAceleracion[2] < -5000) FlagUmbral[6] = 1; // ESTA DADO VUELTA!
-						DataAcelerometro.FloatAceleracion[2] = -DataAcelerometro.FloatAceleracion[2];
+					if(DataAcelerometro.FloatAceleracion[2]<0)DataAcelerometro.FloatAceleracion[2] = -DataAcelerometro.FloatAceleracion[1];
 
-					}
 
 
 
@@ -131,10 +130,7 @@ extern uint32_t FlagUmbral[6];
 
 			        if(DataAcelerometro.FloatAceleracionAngular[0]<0)DataAcelerometro.FloatAceleracionAngular[0] = -DataAcelerometro.FloatAceleracionAngular[0];
 			        if(DataAcelerometro.FloatAceleracionAngular[1]<0)DataAcelerometro.FloatAceleracionAngular[1] = -DataAcelerometro.FloatAceleracionAngular[1];
-			        if(DataAcelerometro.FloatAceleracionAngular[2]<0){
-			        	DataAcelerometro.FloatAceleracionAngular[2] = -DataAcelerometro.FloatAceleracionAngular[2];
-
-			        }
+			        if(DataAcelerometro.FloatAceleracionAngular[2]<0)DataAcelerometro.FloatAceleracionAngular[2] = -DataAcelerometro.FloatAceleracionAngular[2];
 
 
 
