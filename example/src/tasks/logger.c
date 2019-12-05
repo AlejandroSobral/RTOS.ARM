@@ -31,9 +31,6 @@ void Logger (void)
 	extern uint32_t Grabado;
 	int DatoAcelerometro_Orientacion;
 	uint32_t DatoAcelerometro_AceleracionAngular;
-	float Int_AceleracionZNeg = -8700;
-	float Int_AceleracionZPos = 5000;
-
 
 	uint32_t i = 0;
 
@@ -46,7 +43,7 @@ void Logger (void)
 			FlagUmbral[0] = 1; //giro brusco
 		}
 
-		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)//Esto es porque esta dado vuelta )
+		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)
 		{
 			FlagUmbral[1] = 1; // Golpe
 		}
