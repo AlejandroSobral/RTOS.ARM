@@ -26,8 +26,10 @@ static uint8_t dataTX[TamPag];
 I2C_STATUS_T i2c_state;
 static uint32_t UltimaMemoriaGrabada;
 static uint32_t UltimaMemoriaLeida;
+static uint32_t UltimaMemoriaErase;
 static struct_dataRXeeprom dataRXeeprom_Read[4];
 static uint32_t IndicePagLeida_Read;
+
 
 extern struct_acelerometro DataAcelerometro;
 
@@ -45,7 +47,19 @@ void init_memoriai2c (void)
 }
 
 
+void Ciclo_Memoria_Erase(void){
+static uint32_t IndicePaginaErase;
 
+	if(UltimaMemoriaErase > (MaxPos)) UltimaMemoriaErase = 0;
+
+
+	LimpiaBuff(dataTX);
+	PreparaPaginaErase(); //Acelerometro angular y fuerza G
+	i2c_state = Write_24LC(dataTX, UltimaMemoriaGrabada);
+	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaGrabada+=TamPag;}
+	IndicePaginaErase++;
+
+}
 void Ciclo_Memoria_Working (void)
 {
 
@@ -249,7 +263,8 @@ void PreparaPaginaUno (void) //Aceleraciones G y angulares
 }
 
 void PreparaPaginaDos (void) // Orientacion, H&T
-{
+{uint32_t i=0;
+extern uint32_t FlagUmbral[NMROFLAGS];
 	extern struct_sensores STRUCT_SENSOR;
 	dataTX[0] = 'O';
 	dataTX[1] = 'X';
@@ -264,6 +279,17 @@ void PreparaPaginaDos (void) // Orientacion, H&T
 	dataTX[10] = 'H';
 	dataTX[11] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,1);
 	dataTX[12] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,0);
+
+
+	for(i=0; i<NMROFLAGS; i++)
+	{
+		if(FlagUmbral[i] == 1)
+		{
+
+			dataTX[i+13] = 1;
+		}
+	}//ACA VOY GRABANDO CUALES FLAGS SON LOS QUE QUEDARON LEVANTADOS!
+
 
 }
 
@@ -339,4 +365,13 @@ void PreparaPaginaCuatro (void) //Del GPS: Fecha y Longitud
 	dataTX[26]= longitud[16];
 	dataTX[27]= longitud[17];
 }
+
+void PreparaPaginaErase (void) //Borro todo
+{
+	uint32_t i = 0;
+	for (i=0;i<TamPag;i++)
+	{	dataTX[i]= 0;
+	}
+}
+
 

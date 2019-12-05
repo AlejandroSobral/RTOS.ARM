@@ -22,6 +22,7 @@
 #include "../tasks/logger.h"
 #include "../tasks/24LC256.h"
 #include "../tasks/SwitchReset.h"
+#include "../tasks/InformeBT.h"
 #include "../tasks/SwitchModo.h"
 #include "../c-tds/scheduler_lpc1769.h"
 
@@ -233,6 +234,7 @@ extern uint32_t Switchea_lista_flag;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	SCH_Add_Task(Ciclo_Memoria_Erase,0,1,25000,0);
         	primer_inicio = 0;
 
 
@@ -245,6 +247,7 @@ extern uint32_t Switchea_lista_flag;
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	SCH_Add_Task(InformeBT,0,1,250000,0);
         	//ACA TENGO QUE LEVANTAR LA LISTA DE DATOS GRABADA
 			break;
         	case BATERIABAJA:
