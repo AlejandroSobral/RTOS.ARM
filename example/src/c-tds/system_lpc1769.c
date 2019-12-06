@@ -220,6 +220,7 @@ extern uint32_t Switchea_lista_flag;
 	if (Switchea_lista_flag)
 	{
 		Borro_lista();
+
 		Switchea_lista_flag = 0;
 
 
@@ -297,7 +298,7 @@ uint32_t i;
 
 
 //WATCHDOG y GOGO
-	for( i=0; i<Task_Index_Total ; i ++)
+	for( i=0; i<SCH_MAX_TASKS ; i ++)
 	{
 	 SCH_tasks_G[i].pTask = 0;
 	 SCH_tasks_G[i].Delay = 0;
