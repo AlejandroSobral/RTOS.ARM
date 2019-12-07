@@ -20,7 +20,7 @@
 // See Heartbeat task (if used) for basic fault-reporting mechanism
 uint32_t Fault_code_G;
 uint32_t Task_Index_Total;
-
+uint32_t GolpesLeidos;
 
 // ------ Private variable definitions -----------------------------
 // The array of tasks

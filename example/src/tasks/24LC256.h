@@ -12,7 +12,10 @@
 
 typedef struct{
 
-	uint8_t dataRX[TamPag];
+	uint8_t dataRX1[TamPag];
+	uint8_t dataRX2[TamPag];
+	uint8_t dataRX3[TamPag];
+	uint8_t dataRX4[TamPag];
 } struct_dataRXeeprom;
 
 I2C_STATUS_T Write_24LC (uint8_t * vec,uint16_t address);

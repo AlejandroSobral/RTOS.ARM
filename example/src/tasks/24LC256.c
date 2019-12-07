@@ -27,8 +27,8 @@ I2C_STATUS_T i2c_state;
 static uint32_t UltimaMemoriaGrabada;
 static uint32_t UltimaMemoriaLeida;
 static uint32_t UltimaMemoriaErase;
-static struct_dataRXeeprom dataRXeeprom_Read[4];
-static uint32_t IndicePagLeida_Read;
+static struct_dataRXeeprom dataRXeeprom_Read[30];
+
 
 
 extern struct_acelerometro DataAcelerometro;
@@ -117,11 +117,11 @@ static uint32_t IndicePagina;
 
 void Ciclo_Memoria_Reading (void){
 
-extern struct_dataRXeeprom dataRXeeprom_Read[4];
-extern uint32_t IndicePagLeida_Read;
+extern struct_dataRXeeprom dataRXeeprom_Read[30]; // 30 son los golpes que puede registar, 127 páginas / 4
+extern uint32_t GolpesLeidos;
 
 
-if(UltimaMemoriaLeida > (MaxPos)){ UltimaMemoriaLeida = 0;} //Roll-over de memoria
+if(UltimaMemoriaLeida > (MaxPos)){ UltimaMemoriaLeida = 0; } //Roll-over de memoria
 
 
 	if(UltimaMemoriaLeida > UltimaMemoriaGrabada)
@@ -133,36 +133,36 @@ if(UltimaMemoriaLeida > (MaxPos)){ UltimaMemoriaLeida = 0;} //Roll-over de memor
 			}
 
 
-	switch (IndicePagLeida_Read)
+	switch (GolpesLeidos)
 	{
 
 	case 0:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[IndicePagLeida_Read].dataRX, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
-	IndicePagLeida_Read++;
+
 	break;
 	case 1:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[IndicePagLeida_Read].dataRX, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX2, UltimaMemoriaLeida);
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
-	IndicePagLeida_Read++;
+
 	break;
 	case 2:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[IndicePagLeida_Read].dataRX, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX3, UltimaMemoriaLeida);
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
-	IndicePagLeida_Read++;
+
 	break;
 	case 3:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[IndicePagLeida_Read].dataRX, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX4, UltimaMemoriaLeida);
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
-	IndicePagLeida_Read=0;
+	GolpesLeidos++;
 	break;
 	}
 }
