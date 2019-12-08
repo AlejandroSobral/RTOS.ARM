@@ -2,6 +2,8 @@
 #include "../main/main.h"
 #include "string.h"
 #include "SwitchReset.h"
+#include "24LC256.h"
+#include "InformeBT.h"
 #include "../c-tds/port_Lpc1769.h"
 #include "chip.h"
 #include <stdio.h>
@@ -17,6 +19,7 @@ static uint8_t antirrebote_veces;
 static uint8_t toggle_modo;
 static uint8_t contador_toggle;
 extern uint32_t Switchea_lista_flag;
+
 
 if(toggle_modo)
 {contador_toggle++;
@@ -53,6 +56,7 @@ if(toggle_modo)
 		if(ESTADO_GLOBAL.Modo == BTH && Sw_switch_MODO_state == SW_NOT_PRESSED)
 			{Switchea_lista_flag = 1;
 			cantidad_golpes = 0;
+
 
 			}
 		if(ESTADO_GLOBAL.Modo!=RESET){ // si esta en RESET, este tiene prioridad

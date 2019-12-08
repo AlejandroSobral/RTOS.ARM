@@ -216,6 +216,7 @@ eSystem_mode SYSTEM_Get_Mode(void)
 void Switcheo_Lista (void)
 {
 extern uint32_t Switchea_lista_flag;
+extern uint32_t GolpesLeidos;
 
 	if (Switchea_lista_flag)
 	{
@@ -230,6 +231,7 @@ extern uint32_t Switchea_lista_flag;
 	       	{ // SELECCIONO LA LISTA DE TAREAS
         	case RESET:
         	// Enable SysTick timer
+        	GolpesLeidos=0;
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
@@ -265,6 +267,7 @@ extern uint32_t Switchea_lista_flag;
         // Enable SysTick timer
            SysTick->CTRL |= 0x01;
            SysTick->CTRL |= 0x02;
+           GolpesLeidos=0;
            primer_inicio = 1; //Este flag me sirve para saber si alguna vez entré en este estado
            SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
            SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
@@ -288,7 +291,7 @@ extern uint32_t Switchea_lista_flag;
 void Borro_lista (void)
 {
 extern sTask SCH_tasks_G[SCH_MAX_TASKS];
-extern uint32_t Task_Index_Total;
+
 uint32_t i;
 
  //FRENO SYSTICK, ALIMENTO WATCHDOG, BORRO, CARGO Y PRENDO SYSTICK
