@@ -235,7 +235,7 @@ extern uint32_t Switchea_lista_flag;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
-        	SCH_Add_Task(Ciclo_Memoria_Erase,0,1,25000,0);
+        	SCH_Add_Task(Ciclo_Memoria_Erase,0,1,2500000,0);
         	primer_inicio = 0;
 
 

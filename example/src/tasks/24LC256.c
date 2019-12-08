@@ -53,11 +53,15 @@ static uint32_t IndicePaginaErase;
 	if(UltimaMemoriaErase > (MaxPos)) UltimaMemoriaErase = 0;
 
 
-	LimpiaBuff(dataTX);
+while(IndicePaginaErase < MaxPos){
 	PreparaPaginaErase(); //Acelerometro angular y fuerza G
-	i2c_state = Write_24LC(dataTX, UltimaMemoriaGrabada);
-	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaGrabada+=TamPag;}
+	i2c_state = Write_24LC(dataTX, UltimaMemoriaErase);
+	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaErase+=TamPag;}
 	IndicePaginaErase++;
+	if(UltimaMemoriaErase > (MaxPos)){
+		break;
+	}
+}
 
 }
 void Ciclo_Memoria_Working (void)
