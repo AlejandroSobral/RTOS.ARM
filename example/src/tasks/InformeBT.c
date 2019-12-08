@@ -13,6 +13,8 @@
 #include "InformeBT.h"
 
 
+
+
 void InformeBT(void){
 
 extern uint32_t cantidad_golpes, primer_inicio;
