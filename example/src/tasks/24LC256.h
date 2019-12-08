@@ -7,7 +7,8 @@
 /** i2c port used */
 #define I2C_PORT I2C1 //
 #define TX_OK 0
-#define PaginasPorGrabado 4
+#define PaginasPorGolpe 4
+#define CantidadMaximaGolpes 30
 #define MaxPos 4064 // 127 paginas de 32 cada uno
 
 typedef struct{
