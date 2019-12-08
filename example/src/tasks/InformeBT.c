@@ -20,6 +20,7 @@ extern uint32_t cantidad_golpes, primer_inicio;
 uint32_t i = 0;
 if(primer_inicio!=0)
 {
+
 	for(i=0; i< cantidad_golpes;i++)
 	{
 		Ciclo_Memoria_Reading();

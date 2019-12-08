@@ -51,21 +51,27 @@ void init_memoriai2c (void)
 
 
 void Ciclo_Memoria_Erase(void){
-static uint32_t IndicePaginaErase;
+
 extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
 uint32_t i = 0, j = 0;
 
 	if(UltimaMemoriaErase > (MaxPos)) UltimaMemoriaErase = 0;
 
 
-while(IndicePaginaErase < MaxPos){
+while(UltimaMemoriaErase < MaxPos){
 	PreparaPaginaErase(); //Acelerometro angular y fuerza G
 	i2c_state = Write_24LC(dataTX, UltimaMemoriaErase);
-	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaErase+=TamPag;}
-	IndicePaginaErase++;
-	if(UltimaMemoriaErase > (MaxPos)){
-		break;
+
+
+	while(i2c_state != I2C_STATUS_DONE){
+		i2c_state = Write_24LC(dataTX, UltimaMemoriaErase);
 	}
+
+	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaErase+=TamPag;}
+
+}
+UltimaMemoriaErase = 0;
+
 for (i = 0; i<CantidadMaximaGolpes; i++)
 	{	for(j = 0; j<TamPag ; j++)
 		{
@@ -90,7 +96,7 @@ for (i = 0; i<CantidadMaximaGolpes; i++)
 		}
 }
 
-}
+
 void Ciclo_Memoria_Working (void)
 {
 
@@ -187,6 +193,11 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+
+	while(i2c_state != I2C_STATUS_DONE){
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+	}
+
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
 
 
@@ -195,6 +206,11 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX2, UltimaMemoriaLeida);
+
+	while(i2c_state != I2C_STATUS_DONE){
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+	}
+
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
 
 
@@ -203,6 +219,11 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX3, UltimaMemoriaLeida);
+
+	while(i2c_state != I2C_STATUS_DONE){
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+	}
+
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
 
 
@@ -211,6 +232,11 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX4, UltimaMemoriaLeida);
+
+	while(i2c_state != I2C_STATUS_DONE){
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+	}
+
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
 	GolpesLeidos++;
 	break;
@@ -359,18 +385,18 @@ void PreparaPaginaTres (void) //Del GPS: Hora y Latitud
 	dataTX[6]= hora[6];
 	dataTX[7]= hora[7];
 	dataTX[8]= hora[8];
-//	dataTX[9]= hora[9];
-//	dataTX[10]= latitud[0];
-//	dataTX[11]= latitud[1];
-//	dataTX[12]= latitud[2];
-//	dataTX[13]= latitud[3];
-//	dataTX[14]= latitud[4];
-	dataTX[9]= 'A';
-	dataTX[10]= 'B';
-	dataTX[11]= 'C';
-	dataTX[12]= 'D';
-	dataTX[13]= 'E';
-	dataTX[14]= 'F';
+	dataTX[9]= hora[9];
+	dataTX[10]= latitud[0];
+	dataTX[11]= latitud[1];
+	dataTX[12]= latitud[2];
+	dataTX[13]= latitud[3];
+	dataTX[14]= latitud[4];
+//	dataTX[9]= 'A';
+//	dataTX[10]= 'B';
+//	dataTX[11]= 'C';
+//	dataTX[12]= 'D';
+//	dataTX[13]= 'E';
+//	dataTX[14]= 'F';
 	dataTX[15]= latitud[5];
 	dataTX[16]= latitud[6];
 	dataTX[17]= latitud[7];
@@ -402,12 +428,12 @@ void PreparaPaginaCuatro (void) //Del GPS: Fecha y Longitud
 	dataTX[6]= fecha[6];
 	dataTX[7]= fecha[7];
 	dataTX[8]= fecha[8];
-	dataTX[9]= 'h';
-	dataTX[10]= 'j';
-	dataTX[11]= 'q';
-	dataTX[12]= 'r';
-	dataTX[13]= 's';
-	dataTX[14]= 't';
+	dataTX[9]= fecha[9];
+	dataTX[10]= longitud[0];
+	dataTX[11]= longitud[1];
+	dataTX[12]= longitud[2];
+	dataTX[13]= longitud[3];
+	dataTX[14]= longitud[4];
 	dataTX[15]= longitud[5];
 	dataTX[16]= longitud[6];
 	dataTX[17]= longitud[7];
@@ -427,7 +453,7 @@ void PreparaPaginaErase (void) //Borro todo
 {
 	uint32_t i = 0;
 	for (i=0;i<TamPag;i++)
-	{	dataTX[i]= 0;
+	{	dataTX[i]= 'F';
 	}
 }
 
