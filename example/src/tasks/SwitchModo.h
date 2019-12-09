@@ -12,8 +12,8 @@ void Switch_MODO_Init(void);
 void Switch_MODO(void);
 #define SWITCH_MODO_PIN_MODE (IOCON_MODE_INACT)
 #define SWITCH_MODO_PIN_FUNC (IOCON_FUNC0)
-#define MODO_SWITCH_PORT (0)
-#define MODO_SWITCH_PIN  (5)
+#define MODO_SWITCH_PORT (1)
+#define MODO_SWITCH_PIN  (18)
 #define SwitchMODOON 1
 #define SwitchMODOOFF 0
 
