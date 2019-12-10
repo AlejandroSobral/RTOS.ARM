@@ -13,7 +13,7 @@
 
 extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
 
-void InformeBT(void){
+void InformeBT(void){//
 
 static int lecturaunica = 0;
 extern uint32_t cantidad_golpes, primer_inicio;
