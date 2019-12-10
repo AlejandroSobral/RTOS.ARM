@@ -29,7 +29,7 @@ I2C_STATUS_T i2c_state;
 static uint32_t UltimaMemoriaGrabada;
 static uint32_t UltimaMemoriaLeida;
 static uint32_t UltimaMemoriaErase;
-static struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
+struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
 static uint32_t IndicePaginaRead;
 
 
@@ -167,7 +167,7 @@ static uint32_t IndicePaginaWrite;
 
 void Ciclo_Memoria_Reading (void){
 
-extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes]; // 30 son los golpes que puede registar, 127 páginas / 4
+//struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes]; // 30 son los golpes que puede registar, 127 páginas / 4
 extern uint32_t GolpesLeidos;
 extern uint32_t IndicePaginaRead;
 
@@ -208,7 +208,7 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX2, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX2, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
@@ -221,7 +221,7 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX3, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX3, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
@@ -234,7 +234,7 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX4, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX4, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
@@ -385,18 +385,18 @@ void PreparaPaginaTres (void) //Del GPS: Hora y Latitud
 	dataTX[6]= hora[6];
 	dataTX[7]= hora[7];
 	dataTX[8]= hora[8];
-	dataTX[9]= hora[9];
-	dataTX[10]= latitud[0];
-	dataTX[11]= latitud[1];
-	dataTX[12]= latitud[2];
-	dataTX[13]= latitud[3];
-	dataTX[14]= latitud[4];
-//	dataTX[9]= 'A';
-//	dataTX[10]= 'B';
-//	dataTX[11]= 'C';
-//	dataTX[12]= 'D';
-//	dataTX[13]= 'E';
-//	dataTX[14]= 'F';
+//	dataTX[9]= hora[9];
+//	dataTX[10]= latitud[0];
+//	dataTX[11]= latitud[1];
+//	dataTX[12]= latitud[2];
+//	dataTX[13]= latitud[3];
+//	dataTX[14]= latitud[4];
+	dataTX[9]= 'A';
+	dataTX[10]= 'B';
+	dataTX[11]= 'C';
+	dataTX[12]= 'D';
+	dataTX[13]= 'E';
+	dataTX[14]= 'F';
 	dataTX[15]= latitud[5];
 	dataTX[16]= latitud[6];
 	dataTX[17]= latitud[7];
@@ -433,13 +433,20 @@ void PreparaPaginaCuatro (void) //Del GPS: Fecha y Longitud
 	dataTX[11]= longitud[1];
 	dataTX[12]= longitud[2];
 	dataTX[13]= longitud[3];
-	dataTX[14]= longitud[4];
-	dataTX[15]= longitud[5];
-	dataTX[16]= longitud[6];
-	dataTX[17]= longitud[7];
-	dataTX[18]= longitud[8];
-	dataTX[19]= longitud[9];
-	dataTX[20]= longitud[10];
+	dataTX[14]= '1';
+	dataTX[15]= '2';
+	dataTX[16]='3';
+	dataTX[17]= '4';
+	dataTX[18]= '5';
+	dataTX[19]= '6';
+	dataTX[20]= 	'7';
+//	dataTX[14]= longitud[4];
+//	dataTX[15]= longitud[5];
+//	dataTX[16]= longitud[6];
+//	dataTX[17]= longitud[7];
+//	dataTX[18]= longitud[8];
+//	dataTX[19]= longitud[9];
+//	dataTX[20]= longitud[10];
 	dataTX[21]= longitud[11];
 	dataTX[22]= longitud[12];
 	dataTX[23]= longitud[13];

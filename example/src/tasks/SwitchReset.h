@@ -15,8 +15,8 @@ void Switch_Reset(void);
 #define SWITCH_RESET_PIN_FUNC (IOCON_FUNC0)
 #define SW_PRESSED 1
 #define SW_NOT_PRESSED 0
-#define RESET_SWITCH_PORT (0)
-#define RESET_SWITCH_PIN  (4)
+#define RESET_SWITCH_PORT (4)
+#define RESET_SWITCH_PIN  (29)
 #define SwitchResetON 1
 #define SwitchResetOFF 0
 
