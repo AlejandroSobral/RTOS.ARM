@@ -81,50 +81,73 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 							if (dataRXeeprom_Read[j].dataRX2[13]==1)
 							{
 								sprintf(cadena,"Hubo una fuerte acel. angular.\r\n");
+
+								for(i=0;i<31;i++)
+								{
+								while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+								{
+									;
+								}
 								if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 								{
-								for(i=0;i<31;i++)
-								{ if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-									Chip_UART_SendByte(LPC_UART1,cadena[i]);
-								}
+								Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 								}
 							}
+							}
+
 							break;
 							case 1:
 								if (dataRXeeprom_Read[j].dataRX2[14]==1)
 								{
 									sprintf(cadena,"Hubo una fuerte acel.\r\n");
+									for(i=0;i<31;i++)
+									{
+									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+									{
+										;
+									}
 									if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 									{
-									for(i=0;i<36;i++)
-										if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-										Chip_UART_SendByte(LPC_UART1,cadena[i]);
+									Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 									}
+								}
 								}
 								break;
 							case 2:
 								if (dataRXeeprom_Read[j].dataRX2[15]==1)
 								{
-									sprintf(cadena,"Hubo una fuerte inclinacion.\r\n");
+									sprintf(cadena,"Se excedieron los 45º de inclinacion.\r\n");
+									for(i=0;i<31;i++)
+									{
+									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+									{
+										;
+									}
 									if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 									{
-									for(i=0;i<36;i++){
-										if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-										Chip_UART_SendByte(LPC_UART1,cadena[i]);
-									}
+									Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 									}
 								}
-								break;
+								}
 							case 3:
 								if (dataRXeeprom_Read[j].dataRX2[16]==1)
 								{
 									sprintf(cadena,"Humedad fuera del rango aceptable: %%c%c.\r\n", dataRXeeprom_Read[j].dataRX2[11], dataRXeeprom_Read[j].dataRX2[12]);
+									for(i=0;i<31;i++)
+									{
+									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+									{
+										;
+									}
 									if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 									{
-									for(i=0;i<40;i++){
-										if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-										Chip_UART_SendByte(LPC_UART1,cadena[i]);}
+									Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 									}
+								}
 								}
 								break;
 							case 4:
@@ -132,39 +155,54 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 								if (dataRXeeprom_Read[j].dataRX2[17]==1)
 								{
 									sprintf(cadena,"Temperatura fuera del rango aceptable: %c%c grados.\r\n", dataRXeeprom_Read[j].dataRX2[8], dataRXeeprom_Read[j].dataRX2[9] );
+									for(i=0;i<31;i++)
+									{
+									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+									{
+										;
+									}
 									if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 									{
-									for(i=0;i<50;i++){
-										if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-										Chip_UART_SendByte(LPC_UART1,cadena[i]);
+									Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 									}
-									}
+								}
 								}
 								break;
 							case 5:
 								if (dataRXeeprom_Read[j].dataRX2[18]==1)
 								{
 									sprintf(cadena,"Bateria baja.\r\n");
+									for(i=0;i<31;i++)
+									{
+									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+									{
+										;
+									}
 									if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 									{
-									for(i=0;i<14;i++)
-									{ if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-										Chip_UART_SendByte(LPC_UART1,cadena[i]);
+									Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 									}
-									}
+								}
 								}
 								break;
 							case 6:
 								if (dataRXeeprom_Read[j].dataRX2[19]==1)
 								{
 									sprintf(cadena,"Me dieron vuelta como una media.\r\n");
+									for(i=0;i<31;i++)
+									{
+									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+									{
+										;
+									}
 									if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 									{
-									for(i=0;i<32;i++)
-									{ if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-										Chip_UART_SendByte(LPC_UART1,cadena[i]);
+									Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 									}
-									}
+								}
 								}
 								break;
 						}
@@ -173,26 +211,37 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 
 
 					sprintf(cadena,"El hecho ocurrio a las %c%c:%c%c:%c%c el dia %c%c/%c%c/%c%c\r\n",dataRXeeprom_Read[j].dataRX3[0],dataRXeeprom_Read[j].dataRX3[1],dataRXeeprom_Read[j].dataRX3[3],dataRXeeprom_Read[j].dataRX3[4],dataRXeeprom_Read[j].dataRX3[6],dataRXeeprom_Read[j].dataRX3[7],dataRXeeprom_Read[j].dataRX4[0],dataRXeeprom_Read[j].dataRX4[1],dataRXeeprom_Read[j].dataRX4[3],dataRXeeprom_Read[j].dataRX4[4],dataRXeeprom_Read[j].dataRX4[6],dataRXeeprom_Read[j].dataRX4[7] );
-					if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-					{
-					for(i=0;i<48;i++){
-						if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-						Chip_UART_SendByte(LPC_UART1,cadena[i]);
-					}
-					}
 
-					sprintf(cadena,"en las coordenadas %c%c %c%c'%c%c%c%c%c'' %c%c %c%c'%c%c%c%c%c''\r\n", dataRXeeprom_Read[j].dataRX3[10],dataRXeeprom_Read[j].dataRX3[11],dataRXeeprom_Read[j].dataRX3[13],dataRXeeprom_Read[j].dataRX3[14],dataRXeeprom_Read[j].dataRX3[16],dataRXeeprom_Read[j].dataRX3[17],dataRXeeprom_Read[j].dataRX3[18],dataRXeeprom_Read[j].dataRX3[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX3[24],dataRXeeprom_Read[j].dataRX4[10],dataRXeeprom_Read[j].dataRX4[11],dataRXeeprom_Read[j].dataRX4[13],dataRXeeprom_Read[j].dataRX4[14],dataRXeeprom_Read[j].dataRX4[16],dataRXeeprom_Read[j].dataRX4[17],dataRXeeprom_Read[j].dataRX4[18],dataRXeeprom_Read[j].dataRX4[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX4[24]);
+					for(i=0;i<48;i++)
+					{
+					while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+					{
+						;
+					}
 					if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
 					{
-					for(i=0;i<47;i++){
-						if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-						Chip_UART_SendByte(LPC_UART1,cadena[i]);
+					Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
 					}
+				}
+
+					sprintf(cadena," en las coordenadas %c%c %c%c'%c%c%c%c%c'' %c%c %c%c'%c%c%c%c%c''\r\n", dataRXeeprom_Read[j].dataRX3[10],dataRXeeprom_Read[j].dataRX3[11],dataRXeeprom_Read[j].dataRX3[13],dataRXeeprom_Read[j].dataRX3[14],dataRXeeprom_Read[j].dataRX3[16],dataRXeeprom_Read[j].dataRX3[17],dataRXeeprom_Read[j].dataRX3[18],dataRXeeprom_Read[j].dataRX3[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX3[24],dataRXeeprom_Read[j].dataRX4[10],dataRXeeprom_Read[j].dataRX4[11],dataRXeeprom_Read[j].dataRX4[13],dataRXeeprom_Read[j].dataRX4[14],dataRXeeprom_Read[j].dataRX4[16],dataRXeeprom_Read[j].dataRX4[17],dataRXeeprom_Read[j].dataRX4[18],dataRXeeprom_Read[j].dataRX4[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX4[24]);
+
+					for(i=0;i<48;i++)
+					{
+					while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+					{
+						;;
 					}
+					if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+					{
+					Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
+					}
+				}
 
 					j++;
 				}
-
 			}
 		}
 	}
