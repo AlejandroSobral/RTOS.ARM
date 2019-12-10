@@ -20,7 +20,7 @@
 //4= Temperatura
 //5=Bateria
 //6=Invertido
-uint32_t UltimaPosicionMemoria; // Global
+uint32_t UltimaPosicionMemoria; // Global//
 uint8_t MSB, LSB;
 static uint8_t BufferTXEeprom[TamPag]; uint8_t BufferRXEeprom[TamPag];
 // BufferRXeeprom es DONDE RECIBE LA MEMORIA!!!
