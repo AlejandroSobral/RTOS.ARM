@@ -73,12 +73,12 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 					//18= Bateria
 					//19= Vuelta 180Â°
 
-					for(int k=0;k<NMROFLAGS;k++)
+					for(int k=0;k<NMROFLAGS;k++)//
 					{
-						switch(k)
+						switch(k)//
 						{
 							case 0:
-							if (dataRXeeprom_Read[j].dataRX2[13]==1)//
+							if (dataRXeeprom_Read[j].dataRX2[13]==1)
 							{
 								sprintf(cadena,"Hubo una fuerte acel. angular.\r\n");
 								if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
