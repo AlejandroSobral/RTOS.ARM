@@ -9,7 +9,7 @@
 #include <stdio.h> //
 #include <math.h>
 #include "InformeBT.h"
-//#include "../tasks/24LC256.h"
+//#include "../tasks/24LC256.h"//
 
 extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
 
