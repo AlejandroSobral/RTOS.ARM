@@ -13,7 +13,7 @@
 
 extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
 
-void InformeBT(void){//
+void InformeBT(void){
 
 static int lecturaunica = 0;
 extern uint32_t cantidad_golpes, primer_inicio;
@@ -78,7 +78,7 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 						switch(k)
 						{
 							case 0:
-							if (dataRXeeprom_Read[j].dataRX2[13]==1)
+							if (dataRXeeprom_Read[j].dataRX2[13]==1)//
 							{
 								sprintf(cadena,"Hubo una fuerte acel. angular.\r\n");
 								if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
