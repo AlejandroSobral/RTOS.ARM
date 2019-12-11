@@ -226,10 +226,10 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	case 0:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX1, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX1, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX1, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
@@ -239,10 +239,10 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	case 1:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX2, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX2, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX2, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX2, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
@@ -252,10 +252,10 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	case 2:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX3, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX3, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX3, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX3, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
@@ -265,10 +265,10 @@ for(IndicePaginaRead = 0; IndicePaginaRead<PaginasPorGolpe ; IndicePaginaRead++)
 	case 3:
 	i2c_state = 0;
 	LimpiaBuff(BufferRXEeprom);
-	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX4, UltimaMemoriaLeida);
+	i2c_state = Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX4, UltimaMemoriaLeida);
 
 	while(i2c_state != I2C_STATUS_DONE){
-		Read_24LC(dataRXeeprom_Read[GolpesLeidos].dataRX4, UltimaMemoriaLeida);
+		Read_24LC(dataRXeeprom_Read[GolpesLeidos+1].dataRX4, UltimaMemoriaLeida);
 	}
 
 	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaLeida+=TamPag;}
