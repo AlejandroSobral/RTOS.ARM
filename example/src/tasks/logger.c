@@ -96,13 +96,28 @@ void Logger (void)
 
 
 	//ACÁ ES DONDE GRABA LOS DATOS EN LA MEMORIA
-if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagUmbral[4]==1||FlagUmbral[6]==1)
+if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagUmbral[4]==1||FlagUmbral[5]==1||FlagUmbral[6]==1)
 
-		{//GRABA EN LA MEMORIA
+{//GRABA EN LA MEMORIA
+extern uint32_t LeyoCantidadGolpesDeLaMemoria;
+extern uint32_t GraboInfoBateriaBaja;
+		Ciclo_Memoria_Reading_CantidadGolpes(); // LEO LA ULTIMA POSICION DE MEMORIA GRABADA
 		Ciclo_Memoria_Working();
-		Grabado = 1;
-		cantidad_golpes++;
+		Ciclo_Memoria_Writing_CantidadGolpes(); // ESCRIBO LAST MEMORY POSITION
+		if(LeyoCantidadGolpesDeLaMemoria == 0)
+		{ Ciclo_Memoria_Reading_CantidadGolpes();
 		}
+		if(LeyoCantidadGolpesDeLaMemoria == 1)
+		{
+			cantidad_golpes++;
+			Ciclo_Memoria_Writing_CantidadGolpes();
+			}
+		Grabado = 1;
+ if(FlagUmbral[5] == 1 && Grabado == 1) // SI ESTOY EN CASO DE BATERIA BAJA
+ {
+	 GraboInfoBateriaBaja = 1;
+ }
+}
 
 if(Grabado){// && Enviado){
 

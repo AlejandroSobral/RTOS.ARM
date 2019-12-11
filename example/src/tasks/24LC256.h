@@ -9,6 +9,7 @@
 #define TX_OK 0
 #define PaginasPorGolpe 4
 #define CantidadMaximaGolpes 30
+#define Offset 32
 #define MaxPos 4064 // 127 paginas de 32 cada uno
 
 typedef struct{
@@ -25,6 +26,8 @@ void Ciclo_Memoria_Reading (void);
 void Ciclo_Memoria_Working (void);
 void Ciclo_Memoria_Erase (void);
 void init_memoriai2c (void);
+void Ciclo_Memoria_Reading_CantidadGolpes (void);
+void Ciclo_Memoria_Writing_CantidadGolpes (void);
 void test_memoria (void);
 I2C_STATUS_T GrabaPaginaI2c(uint8_t * frase,uint8_t A,uint8_t B);
 I2C_STATUS_T LeePaginaI2c(uint8_t * Buff,uint8_t A,uint8_t B);
@@ -34,5 +37,6 @@ void PreparaPaginaDos (void);
 void PreparaPaginaTres (void);
 void PreparaPaginaCuatro (void);
 void PreparaPaginaErase (void);
+void PreparaPaginaGolpes (void);
 
 

@@ -12,7 +12,7 @@
 #include <math.h>
 
 //FlagUmbral[i]
-//0 = AceleracionAngular
+//0 = AceleracionAngularx
 //1=Aceleracion
 //2=Orientacion
 //3= Humedad

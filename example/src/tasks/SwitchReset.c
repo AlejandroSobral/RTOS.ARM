@@ -1,4 +1,5 @@
 #include "SwitchReset.h"
+#include "24LC256.h"
 #include "../main/main.h"
 #include "string.h"
 #include "../c-tds/port_Lpc1769.h"
@@ -17,6 +18,8 @@ static uint8_t antirrebote_veces;
 static uint8_t toggle;
 static uint8_t contador_toggle;
 extern uint32_t Switchea_lista_flag;
+extern uint32_t UltimaMemoriaGrabada;
+extern uint32_t UltimaMemoriaLeida;
 
 if(toggle)
 {contador_toggle++;
@@ -41,6 +44,9 @@ if(toggle)
 					Switchea_lista_flag = 1;
 					}
 		cantidad_golpes = 0;
+		UltimaMemoriaGrabada = Offset;
+		UltimaMemoriaLeida = Offset;
+		Ciclo_Memoria_Writing_CantidadGolpes();
 
 		}
 	}
