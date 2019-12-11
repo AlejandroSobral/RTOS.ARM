@@ -6,7 +6,7 @@
 #define MaximaAceleracionAngular 800 // º/s
 #define MaximaInclinacionXY 40 // º
 #define MaximaHumedad 85 // %
-#define MaximaTemperatura 30 // ºC
+#define MaximaTemperatura 35 // ºC
 #define XYZBuf 2 // Z lo miro para ver si giró
 #define XYBuf 2
 #define NMROFLAGS 7

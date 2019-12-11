@@ -15,6 +15,7 @@ extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
 
 void InformeBT(void){
 
+	Ciclo_Memoria_Reading_CantidadGolpes();
 static int lecturaunica = 0;
 extern uint32_t cantidad_golpes, primer_inicio;
 int i;
@@ -40,16 +41,38 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 		else
 		{
 			if(!cantidad_golpes)
-			{
-				sprintf(cadena,"Viaje exitoso! No hubo golpes.\r\n");
-				if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+			{	memset(cadena,0,LEN_BUF);
+				sprintf(cadena,"\r \nViaje exitoso! No hubo golpes.\r\n");
+				for(i=0;i<40;i++)
 				{
-				for(i=0;i<LEN_BUFF;i++)
+					while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+					{
+						;
+					}
+					if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+					{
 					Chip_UART_SendByte(LPC_UART1,cadena[i]);
+					}
 				}
+				memset(cadena,0,LEN_BUF);
 			}
 			else
-			{
+			{	memset(cadena,0,LEN_BUF);
+				sprintf(cadena,"\r\n La cantidad de eventos fue de %d ", cantidad_golpes);
+
+				for(i=0;i<45;i++)
+				{
+				while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+				{
+					;
+				}
+				if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+				{
+				Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
+				}
+			}
+				memset(cadena,0,LEN_BUF);
 				if(!lecturaunica)
 				{
 					for(j=0; j<cantidad_golpes;j++)
@@ -72,6 +95,21 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 					//17= Temperatura
 					//18= Bateria
 					//19= Vuelta 180Â°
+					memset(cadena,0,LEN_BUF);
+					sprintf(cadena,"\r\nEn el evento Nmro %d: ", j);
+
+					for(i=0;i<30;i++)
+					{
+					while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+					{
+						;
+					}
+					if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+					{
+					Chip_UART_SendByte(LPC_UART1,cadena[i]);
+
+					}
+				}
 
 					for(int k=0;k<NMROFLAGS;k++)
 					{
@@ -79,7 +117,7 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 						{
 							case 0:
 							if (dataRXeeprom_Read[j].dataRX2[13]==1)
-							{
+							{	memset(cadena,0,LEN_BUF);
 								sprintf(cadena,"Hubo una fuerte acel. angular.\r\n");
 
 								for(i=0;i<31;i++)
@@ -99,7 +137,7 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 							break;
 							case 1:
 								if (dataRXeeprom_Read[j].dataRX2[14]==1)
-								{
+								{	memset(cadena,0,LEN_BUF);
 									sprintf(cadena,"Hubo una fuerte acel.\r\n");
 									for(i=0;i<31;i++)
 									{
@@ -114,12 +152,13 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 									}
 								}
 								}
+
 								break;
 							case 2:
 								if (dataRXeeprom_Read[j].dataRX2[15]==1)
-								{
-									sprintf(cadena,"Se excedieron los 45º de inclinacion.\r\n");
-									for(i=0;i<31;i++)
+								{	memset(cadena,0,LEN_BUF);
+									sprintf(cadena,"Se excedieron los 45 grados inclinacion. \r\n");
+									for(i=0;i<40;i++)
 									{
 									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
 									{
@@ -132,11 +171,12 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 									}
 								}
 								}
+
 							case 3:
 								if (dataRXeeprom_Read[j].dataRX2[16]==1)
-								{
-									sprintf(cadena,"Humedad fuera del rango aceptable: %%c%c.\r\n", dataRXeeprom_Read[j].dataRX2[11], dataRXeeprom_Read[j].dataRX2[12]);
-									for(i=0;i<31;i++)
+								{	memset(cadena,0,LEN_BUF);
+									sprintf(cadena,"Humedad fuera del rango aceptable: %d%d %. \r\n", dataRXeeprom_Read[j].dataRX2[11], dataRXeeprom_Read[j].dataRX2[12]);
+									for(i=0;i<40;i++)
 									{
 									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
 									{
@@ -149,13 +189,14 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 									}
 								}
 								}
+
 								break;
 							case 4:
 
 								if (dataRXeeprom_Read[j].dataRX2[17]==1)
-								{
-									sprintf(cadena,"Temperatura fuera del rango aceptable: %c%c grados.\r\n", dataRXeeprom_Read[j].dataRX2[8], dataRXeeprom_Read[j].dataRX2[9] );
-									for(i=0;i<31;i++)
+								{	memset(cadena,0,LEN_BUF);
+									sprintf(cadena,"Temperatura fuera del rango aceptable: %d%d grados.\r\n", dataRXeeprom_Read[j].dataRX2[8], dataRXeeprom_Read[j].dataRX2[9] );
+									for(i=0;i<40;i++)
 									{
 									while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
 									{
@@ -168,10 +209,11 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 									}
 								}
 								}
+
 								break;
 							case 5:
 								if (dataRXeeprom_Read[j].dataRX2[18]==1)
-								{
+								{	memset(cadena,0,LEN_BUF);
 									sprintf(cadena,"Bateria baja.\r\n");
 									for(i=0;i<31;i++)
 									{
@@ -186,10 +228,11 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 									}
 								}
 								}
+
 								break;
 							case 6:
 								if (dataRXeeprom_Read[j].dataRX2[19]==1)
-								{
+								{	memset(cadena,0,LEN_BUF);
 									sprintf(cadena,"Me dieron vuelta como una media.\r\n");
 									for(i=0;i<31;i++)
 									{
@@ -204,15 +247,16 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 									}
 								}
 								}
+
 								break;
 						}
-						memset(cadena,0,LEN_BUF);
+
 					}
 
+					memset(cadena,0,LEN_BUF);
+					sprintf(cadena,"El hecho ocurrio a las %d%d:%d%d:%d%d el dia %d%d/%d%d/%d%d ",dataRXeeprom_Read[j].dataRX3[0],dataRXeeprom_Read[j].dataRX3[1],dataRXeeprom_Read[j].dataRX3[3],dataRXeeprom_Read[j].dataRX3[4],dataRXeeprom_Read[j].dataRX3[6],dataRXeeprom_Read[j].dataRX3[7],dataRXeeprom_Read[j].dataRX4[0],dataRXeeprom_Read[j].dataRX4[1],dataRXeeprom_Read[j].dataRX4[3],dataRXeeprom_Read[j].dataRX4[4],dataRXeeprom_Read[j].dataRX4[6],dataRXeeprom_Read[j].dataRX4[7] );
 
-					sprintf(cadena,"El hecho ocurrio a las %c%c:%c%c:%c%c el dia %c%c/%c%c/%c%c\r\n",dataRXeeprom_Read[j].dataRX3[0],dataRXeeprom_Read[j].dataRX3[1],dataRXeeprom_Read[j].dataRX3[3],dataRXeeprom_Read[j].dataRX3[4],dataRXeeprom_Read[j].dataRX3[6],dataRXeeprom_Read[j].dataRX3[7],dataRXeeprom_Read[j].dataRX4[0],dataRXeeprom_Read[j].dataRX4[1],dataRXeeprom_Read[j].dataRX4[3],dataRXeeprom_Read[j].dataRX4[4],dataRXeeprom_Read[j].dataRX4[6],dataRXeeprom_Read[j].dataRX4[7] );
-
-					for(i=0;i<48;i++)
+					for(i=0;i<60;i++)
 					{
 					while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
 					{
@@ -224,10 +268,10 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 
 					}
 				}
+					memset(cadena,0,LEN_BUF);
+					sprintf(cadena," en las coordenadas %d%d %d%d'%d%d%d%d%d'' %d%d %d%d'%d%d%d%d%d''\r\n", dataRXeeprom_Read[j].dataRX3[10],dataRXeeprom_Read[j].dataRX3[11],dataRXeeprom_Read[j].dataRX3[13],dataRXeeprom_Read[j].dataRX3[14],dataRXeeprom_Read[j].dataRX3[16],dataRXeeprom_Read[j].dataRX3[17],dataRXeeprom_Read[j].dataRX3[18],dataRXeeprom_Read[j].dataRX3[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX3[24],dataRXeeprom_Read[j].dataRX4[10],dataRXeeprom_Read[j].dataRX4[11],dataRXeeprom_Read[j].dataRX4[13],dataRXeeprom_Read[j].dataRX4[14],dataRXeeprom_Read[j].dataRX4[16],dataRXeeprom_Read[j].dataRX4[17],dataRXeeprom_Read[j].dataRX4[18],dataRXeeprom_Read[j].dataRX4[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX4[24]);
 
-					sprintf(cadena," en las coordenadas %c%c %c%c'%c%c%c%c%c'' %c%c %c%c'%c%c%c%c%c''\r\n", dataRXeeprom_Read[j].dataRX3[10],dataRXeeprom_Read[j].dataRX3[11],dataRXeeprom_Read[j].dataRX3[13],dataRXeeprom_Read[j].dataRX3[14],dataRXeeprom_Read[j].dataRX3[16],dataRXeeprom_Read[j].dataRX3[17],dataRXeeprom_Read[j].dataRX3[18],dataRXeeprom_Read[j].dataRX3[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX3[24],dataRXeeprom_Read[j].dataRX4[10],dataRXeeprom_Read[j].dataRX4[11],dataRXeeprom_Read[j].dataRX4[13],dataRXeeprom_Read[j].dataRX4[14],dataRXeeprom_Read[j].dataRX4[16],dataRXeeprom_Read[j].dataRX4[17],dataRXeeprom_Read[j].dataRX4[18],dataRXeeprom_Read[j].dataRX4[19],dataRXeeprom_Read[j].dataRX3[20],dataRXeeprom_Read[j].dataRX4[24]);
-
-					for(i=0;i<48;i++)
+					for(i=0;i<60;i++)
 					{
 					while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
 					{

@@ -22,15 +22,17 @@
 //6=Invertido
 uint32_t UltimaPosicionMemoria; // Global
 uint8_t MSB, LSB;
-static uint8_t BufferTXEeprom[TamPag]; uint8_t BufferRXEeprom[TamPag];
+uint8_t BufferTXEeprom[TamPag]; uint8_t BufferRXEeprom[TamPag];
 // BufferRXeeprom es DONDE RECIBE LA MEMORIA!!!
-static uint8_t dataTX[TamPag];
+ uint8_t dataTX[TamPag];
 I2C_STATUS_T i2c_state;
-static uint32_t UltimaMemoriaGrabada;
-static uint32_t UltimaMemoriaLeida;
-static uint32_t UltimaMemoriaErase;
+uint32_t UltimaMemoriaGrabada;
+uint32_t UltimaMemoriaLeida;
+uint32_t UltimaMemoriaErase;
 struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
-static uint32_t IndicePaginaRead;
+ uint32_t IndicePaginaRead;
+ uint32_t LeyoCantidadGolpesDeLaMemoria;
+
 
 
 
@@ -71,6 +73,7 @@ while(UltimaMemoriaErase < MaxPos){
 
 }
 UltimaMemoriaErase = 0;
+LeyoCantidadGolpesDeLaMemoria = 0;
 
 for (i = 0; i<CantidadMaximaGolpes; i++)
 	{	for(j = 0; j<TamPag ; j++)
@@ -96,7 +99,37 @@ for (i = 0; i<CantidadMaximaGolpes; i++)
 		}
 }
 
+void Ciclo_Memoria_Reading_CantidadGolpes (void)
+{
+extern uint32_t cantidad_golpes;
 
+	Read_24LC(dataRXeeprom_Read[0].dataRX1, 0);
+	while(i2c_state != I2C_STATUS_DONE){
+		Read_24LC(dataRXeeprom_Read[0].dataRX1, 0);
+	}
+	if(dataRXeeprom_Read[0].dataRX1[0] == 'F')
+	{
+		cantidad_golpes = 0;
+	}
+	if(dataRXeeprom_Read[0].dataRX1[0] != 'F')
+	{
+		cantidad_golpes = dataRXeeprom_Read[0].dataRX1[0];
+	}
+
+	LeyoCantidadGolpesDeLaMemoria = 1;
+
+}
+
+void Ciclo_Memoria_Writing_CantidadGolpes (void)
+{
+	LimpiaBuff(dataTX);
+	PreparaPaginaGolpes(); //Acelerometro angular y fuerza G
+	i2c_state = Write_24LC(dataTX, 0);
+	while(i2c_state != I2C_STATUS_DONE){
+		i2c_state = Write_24LC(dataTX, 0);
+	}
+
+}
 void Ciclo_Memoria_Working (void)
 {
 
@@ -104,8 +137,8 @@ static uint32_t IndicePaginaWrite;
 
 
 
-	if(UltimaMemoriaGrabada > (MaxPos)) UltimaMemoriaGrabada = 0; //Roll-over de memoria
-
+	if(UltimaMemoriaGrabada > (MaxPos)) UltimaMemoriaGrabada = Offset; //Roll-over de memoria
+	if(UltimaMemoriaGrabada == 0) UltimaMemoriaGrabada = Offset; // Ajusto Offset
 
 	for(IndicePaginaWrite = 0; IndicePaginaWrite<PaginasPorGolpe ; IndicePaginaWrite++)
 	{
@@ -172,7 +205,8 @@ extern uint32_t GolpesLeidos;
 extern uint32_t IndicePaginaRead;
 
 
-if(UltimaMemoriaLeida > (MaxPos)){ UltimaMemoriaLeida = 0; } //Roll-over de memoria
+if(UltimaMemoriaLeida > (MaxPos)){ UltimaMemoriaLeida = Offset; } //Roll-over de memoria
+if(UltimaMemoriaLeida == 0) UltimaMemoriaLeida = Offset; // En la página 0 va la data de estado
 
 
 //	if(UltimaMemoriaLeida > UltimaMemoriaGrabada)
@@ -462,6 +496,16 @@ void PreparaPaginaErase (void) //Borro todo
 	for (i=0;i<TamPag;i++)
 	{	dataTX[i]= 'F';
 	}
+}
+
+void PreparaPaginaGolpes (void)
+{extern uint32_t cantidad_golpes;
+	dataTX[0] = cantidad_golpes;
+	uint32_t i = 0;
+	for (i=1;i<TamPag;i++)
+	{	dataTX[i]= 'F';
+	}
+
 }
 
 

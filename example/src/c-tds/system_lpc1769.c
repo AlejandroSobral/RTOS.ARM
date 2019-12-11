@@ -138,8 +138,9 @@ void SYSTEM_Configure_Required_Mode(void)
         	UartMonitor_Init();
         	Switch_Reset_Init();
         	Switch_MODO_Init();
-
-        	ESTADO_GLOBAL.Modo = RESET; // ACA INICIA
+        	Ciclo_Memoria_Reading_CantidadGolpes();
+        	ESTADO_GLOBAL.Modo = SENSORES; // ACA INICIA
+        	Switchea_lista_flag = 1; // Para que agregue toda la lista
         	primer_inicio = 0;
 			//#define RESET 0
 			//#define BTH 1
@@ -217,6 +218,7 @@ void Switcheo_Lista (void)
 {
 extern uint32_t Switchea_lista_flag;
 extern uint32_t GolpesLeidos;
+extern uint32_t cantidad_golpes;
 
 	if (Switchea_lista_flag)
 	{
@@ -232,6 +234,7 @@ extern uint32_t GolpesLeidos;
         	case RESET:
         	// Enable SysTick timer
         	GolpesLeidos=0;
+        	cantidad_golpes = 0;
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
@@ -246,6 +249,7 @@ extern uint32_t GolpesLeidos;
         	// Enable SysTick timer
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
+
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);

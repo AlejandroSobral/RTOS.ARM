@@ -14,11 +14,12 @@ static uint8_t switch_input_MODO;
 extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 void Switch_MODO(void)
 {
-extern uint32_t cantidad_golpes;
+
 static uint8_t antirrebote_veces;
 static uint8_t toggle_modo;
 static uint8_t contador_toggle;
 extern uint32_t Switchea_lista_flag;
+extern uint32_t LeyoCantidadGolpesDeLaMemoria;
 
 
 if(toggle_modo)
@@ -55,7 +56,7 @@ if(toggle_modo)
 		Sw_switch_MODO_state = SW_NOT_PRESSED; //
 		if(ESTADO_GLOBAL.Modo == BTH && Sw_switch_MODO_state == SW_NOT_PRESSED)
 			{Switchea_lista_flag = 1;
-			cantidad_golpes = 0;
+			LeyoCantidadGolpesDeLaMemoria=0;
 
 
 			}
