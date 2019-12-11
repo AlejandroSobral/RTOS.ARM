@@ -389,8 +389,8 @@ extern uint32_t FlagUmbral[NMROFLAGS];
 	dataTX[8] = getdigit((int)STRUCT_SENSOR.Valor_Temperatura,0);
 	dataTX[9] = getdigit((int)STRUCT_SENSOR.Valor_Temperatura,1);
 	dataTX[10] = 'H';
-	dataTX[11] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,1);
-	dataTX[12] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,0);
+	dataTX[11] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,0);
+	dataTX[12] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,1);
 
 
 	for(i=0; i<NMROFLAGS; i++)
