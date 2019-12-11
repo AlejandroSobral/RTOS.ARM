@@ -16,7 +16,7 @@
 uint16_t bufADC;
 int enviandoSerie = 0;
 uint32_t GraboInfoBateriaBaja;
-
+extern
 
 
 // ------ Private variable -----------------------------------------
@@ -33,10 +33,6 @@ void ADC0_Init(void)
 
 void EstadoBateria(void)
 {
-extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
-	static int estado = 0;
-	int i;
-	static char msg[LEN_BUF];
 	uint32_t NivelBateria = 0;
 	float PorcentajeFloat = 0;
 	uint32_t PorcentajeInt = 0;
@@ -46,57 +42,22 @@ extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 	{
 		Chip_ADC_ReadValue(LPC_ADC,0,&bufADC);
 
-		enviandoSerie = 1;
 	}
 
-	if(!enviandoSerie)
+	Chip_ADC_SetStartMode(LPC_ADC,ADC_START_NOW,ADC_TRIGGERMODE_RISING);
+
+
+	NivelBateria = bufADC * 8;
+	PorcentajeFloat = (float)NivelBateria / (float)100;
+	PorcentajeInt = (int)PorcentajeFloat;
+	if (PorcentajeInt < 200)
 	{
-		if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
+		FlagUmbral[5] = 1; // Flag de batería baja
+		if(GraboInfoBateriaBaja == 1)
 		{
-			if(Chip_UART_ReadByte(LPC_UART1)=='_')
-			{
-				Chip_ADC_SetStartMode(LPC_ADC,ADC_START_NOW,ADC_TRIGGERMODE_RISING);
-			}
+			SYSTEM_Perform_Safe_Shutdown();
 		}
+
 	}
 
-	if(enviandoSerie)
-		{
-		if(estado==0)
-		{
-			NivelBateria = bufADC * 8;
-			PorcentajeFloat = (float)NivelBateria / (float)100;
-			PorcentajeInt = (int)PorcentajeFloat;
-			memset(msg,0,LEN_BUF);
-			if (PorcentajeInt > 200)
-			{
-				sprintf(msg,"Estable: %03d\r\n", PorcentajeInt);
-
-			}
-			else
-			{
-				//FlagUmbral[5] = 1; // Flag de batería baja
-				if(GraboInfoBateriaBaja == 1)
-				{
-					//SYSTEM_Perform_Safe_Shutdown();
-				}
-
-				//ESTADO_GLOBAL.Modo = BATERIABAJA;
-				//Switchea_lista_flag = 1;
-			}
-			estado++;
-
-
-			enviandoSerie=0;
-		}
-		else
-		{
-		if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
-		{
-		for(i=0;i<LEN_BUFF;i++)
-			Chip_UART_SendByte(LPC_UART1,msg[i]);
-		estado=0;
-		}
-		}
-	}
 }

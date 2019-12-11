@@ -59,7 +59,6 @@ void GPIO_DHT11(void)
 
 		uint8_t Estado_Anterior	= ALTO; //Por default
 		uint8_t contador		= 0, ValorLeido;
-		uint8_t nada;
 		extern uint8_t demora_lanzada;
 		extern uint8_t DemoraInicial ;
 		extern uint8_t EstadoLectura ;

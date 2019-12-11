@@ -56,7 +56,6 @@ void Acelerometro_Update(void)
 {
 static uint8_t ContadorSerie;
 extern uint32_t enviarSerie;
-extern uint32_t FlagUmbral[6];
 
 
 	if(ContadorSerie > 40)
