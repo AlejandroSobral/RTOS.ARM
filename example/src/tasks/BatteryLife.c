@@ -1,4 +1,5 @@
 #include "dht11.h"
+#include "logger.h"
 #include "UartMonitor.h"
 #include "acelerometro.h"
 #include "BatteryLife.h"
@@ -14,6 +15,8 @@
 // ------ Public variable ------------------------------------------
 uint16_t bufADC;
 int enviandoSerie = 0;
+uint32_t GraboInfoBateriaBaja;
+
 
 
 // ------ Private variable -----------------------------------------
@@ -37,6 +40,7 @@ extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 	uint32_t NivelBateria = 0;
 	float PorcentajeFloat = 0;
 	uint32_t PorcentajeInt = 0;
+	extern uint32_t FlagUmbral[NMROFLAGS];
 
 	if(Chip_ADC_ReadStatus(LPC_ADC,0,ADC_DR_DONE_STAT))
 	{
@@ -71,7 +75,11 @@ extern ESTADO_GLOBAL_DEF ESTADO_GLOBAL;
 			}
 			else
 			{
-				//SYSTEM_Perform_Safe_Shutdown();
+				//FlagUmbral[5] = 1; // Flag de batería baja
+				if(GraboInfoBateriaBaja == 1)
+				{
+					//SYSTEM_Perform_Safe_Shutdown();
+				}
 
 				//ESTADO_GLOBAL.Modo = BATERIABAJA;
 				//Switchea_lista_flag = 1;

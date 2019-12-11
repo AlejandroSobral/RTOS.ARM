@@ -115,6 +115,7 @@ extern uint32_t cantidad_golpes;
 	{
 		cantidad_golpes = dataRXeeprom_Read[0].dataRX1[0];
 	}
+	UltimaMemoriaGrabada = 32+cantidad_golpes*128;
 
 	LeyoCantidadGolpesDeLaMemoria = 1;
 
@@ -500,7 +501,9 @@ void PreparaPaginaErase (void) //Borro todo
 
 void PreparaPaginaGolpes (void)
 {extern uint32_t cantidad_golpes;
+
 	dataTX[0] = cantidad_golpes;
+
 	uint32_t i = 0;
 	for (i=1;i<TamPag;i++)
 	{	dataTX[i]= 'F';

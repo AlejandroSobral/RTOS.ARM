@@ -219,6 +219,7 @@ void Switcheo_Lista (void)
 extern uint32_t Switchea_lista_flag;
 extern uint32_t GolpesLeidos;
 extern uint32_t cantidad_golpes;
+extern uint32_t UltimaMemoriaLeida;
 
 	if (Switchea_lista_flag)
 	{
@@ -249,7 +250,7 @@ extern uint32_t cantidad_golpes;
         	// Enable SysTick timer
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
-
+            UltimaMemoriaLeida = Offset;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
