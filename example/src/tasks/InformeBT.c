@@ -12,11 +12,11 @@
 //#include "../tasks/24LC256.h"//
 
 extern struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
-
+int lecturaunica = 0;
 void InformeBT(void){
 
 	Ciclo_Memoria_Reading_CantidadGolpes();
-static int lecturaunica = 0;
+
 extern uint32_t cantidad_golpes, primer_inicio;
 int i;
 uint32_t j = 0;

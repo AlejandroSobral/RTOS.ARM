@@ -123,7 +123,6 @@ void SYSTEM_Configure_Required_Mode(void)
 
         case NORMAL:
         {
-        	ESTADO_GLOBAL.Modo = RESET;
         	// Set up scheduler for 1 ms ticks (tick interval in *ms*)
             SCH_Init(10);
             /* Initialize WWDT and event router */
@@ -139,22 +138,12 @@ void SYSTEM_Configure_Required_Mode(void)
         	Switch_Reset_Init();
         	Switch_MODO_Init();
         	Ciclo_Memoria_Reading_CantidadGolpes();
-        	ESTADO_GLOBAL.Modo = SENSORES; // ACA INICIA
-        	Switchea_lista_flag = 1; // Para que agregue toda la lista
-        	primer_inicio = 0;
-			//#define RESET 0
-			//#define BTH 1
-			//#define BATERIABAJA 2
-			//#define SENSORES 3
+        	ESTADO_GLOBAL.Modo = SENSORES; // Por default, a modo de medicion
+        	Switchea_lista_flag = 1; // Para que agregue toda la lista de tareas
+        	primer_inicio = 0; //Resetea flag de inicio
 
-        	// Add tasks to schedule.
-            // Parameters are:
-            // 1. Task name
-            // 2. Initial delay / offset (in ticks)
-            // 3. Task period (in ticks): Must be > 0
-            // 4. Task WCET (in microseconds)
-            // 5. Task BCET (in microseconds)
-
+        	//Agrego esta tareas para hacer una primera lectura de los botones
+        	//sobre todo para el caso del reset
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
@@ -220,10 +209,11 @@ extern uint32_t Switchea_lista_flag;
 extern uint32_t GolpesLeidos;
 extern uint32_t cantidad_golpes;
 extern uint32_t UltimaMemoriaLeida;
+extern int lecturaunica;
 
-	if (Switchea_lista_flag)
+	if (Switchea_lista_flag) //Si me mandaron a switchear la lista de tareas
 	{
-		Borro_lista();
+		Borro_lista(); //Borro la lista entera
 
 		Switchea_lista_flag = 0;
 
@@ -232,7 +222,7 @@ extern uint32_t UltimaMemoriaLeida;
 
 	       	switch(ESTADO_GLOBAL.Modo)
 	       	{ // SELECCIONO LA LISTA DE TAREAS
-        	case RESET:
+        	case RESET: //Modo de reseteo, borra toda la memoria
         	// Enable SysTick timer
         	GolpesLeidos=0;
         	cantidad_golpes = 0;
@@ -246,34 +236,28 @@ extern uint32_t UltimaMemoriaLeida;
 
 
 			break;
-        	case BTH:
+        	case BTH: //Modo envio de datos por BlueThooth
         	// Enable SysTick timer
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
             UltimaMemoriaLeida = Offset;
+            lecturaunica = 0;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
         	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
         	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
-        	SCH_Add_Task(InformeBT,0,1,250000,0);
-        	//ACA TENGO QUE LEVANTAR LA LISTA DE DATOS GRABADA
+        	SCH_Add_Task(InformeBT,0,1,250000,0); //Tarea que arma los mensajes
+
 			break;
-        	case BATERIABAJA:
-        	// Enable SysTick timer
-            SysTick->CTRL |= 0x01;
-            SysTick->CTRL |= 0x02;
-        	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
-        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
-        	SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
-        	// ACA VA LO DE FACU
-        	//ACA GRABO LOS TODO Y ME SUICIDO
-        	break;
+
+
         	case SENSORES:
         // Enable SysTick timer
            SysTick->CTRL |= 0x01;
            SysTick->CTRL |= 0x02;
            GolpesLeidos=0;
            primer_inicio = 1; //Este flag me sirve para saber si alguna vez entré en este estado
+           UltimaMemoriaLeida = Offset;
            SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
            SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
            SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);

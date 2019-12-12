@@ -20,6 +20,7 @@ static uint8_t contador_toggle;
 extern uint32_t Switchea_lista_flag;
 extern uint32_t UltimaMemoriaGrabada;
 extern uint32_t UltimaMemoriaLeida;
+extern int lecturaunica;
 
 if(toggle)
 {contador_toggle++;
@@ -47,6 +48,7 @@ if(toggle)
 		UltimaMemoriaGrabada = Offset;
 		UltimaMemoriaLeida = Offset;
 		Ciclo_Memoria_Writing_CantidadGolpes();
+		lecturaunica = 0;
 
 		}
 	}

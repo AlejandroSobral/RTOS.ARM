@@ -11,12 +11,13 @@
 #define XYBuf 2
 #define NMROFLAGS 7
 
-#define FlagAceleracionAngular 		0
-#define FlagAceleracion 			1
-#define FlagAceleracionOrientacion 	2
-#define FlagAceleracionHumedad 		3
-#define FlagAceleracionTemperatura 	4
-#define FlagAceleracionBateria		5
+#define AceleracionAngularExcedida 		0
+#define AceleracionExcedida 			1
+#define AnguloExcedido 					2
+#define ExcesoHumedad 					3
+#define ExcesoTemperatura 				4
+#define BateriaBaja						5
+#define Invertido180 					6
 
 //0 = AceleracionAngular
 //1=Aceleracion

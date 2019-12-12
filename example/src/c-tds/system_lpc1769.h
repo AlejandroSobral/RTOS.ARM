@@ -51,7 +51,6 @@ typedef enum {FAIL_SILENT, NORMAL, FAULT_TASK_TIMING} eSystem_mode;
 // ------ Public data type declarations ----------------------------
 #define RESET 0
 #define BTH 1
-#define BATERIABAJA 2
 #define SENSORES 3
 
 typedef struct{

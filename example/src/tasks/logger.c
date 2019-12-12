@@ -41,45 +41,45 @@ void Logger (void)
 	{	 DatoAcelerometro_AceleracionAngular = DataAcelerometro.FloatAceleracionAngular[i];
 		if(DatoAcelerometro_AceleracionAngular > MaximaAceleracionAngular)
 		{
-			FlagUmbral[0] = 1; //giro brusco
+			FlagUmbral[AceleracionAngularExcedida] = 1; //giro brusco
 		}
 
 		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)
 		{
-			FlagUmbral[1] = 1; // Golpe
+			FlagUmbral[AceleracionExcedida] = 1; // Golpe
 		}
 	}
 
 	for(i = 0; i<XYBuf ; i++)
-	{DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
-		if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55) && (DataAcelerometro.FloatAceleracion[0] > 3500 || DataAcelerometro.FloatAceleracion[1] > 3500 || DataAcelerometro.FloatAceleracion[2] < 0))
+	{
+		if(FlagUmbral[AceleracionExcedida] == 0) // SI ES 1, IMPLICA QUE SE GOLPEO, NO PUEDO MEDIR ANGULOS
+		{
+			DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
+			if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55))
 			{
-				FlagUmbral[1] = 1; //Es un golpe y no una inclinacion
+				FlagUmbral[AnguloExcedido] = 1; // Es inclinacion
 
 			}
-		if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55) && (DataAcelerometro.FloatAceleracion[0] < 2000 || DataAcelerometro.FloatAceleracion[1] < 2000 || DataAcelerometro.FloatAceleracion[2] < 3000))
-		{
-			FlagUmbral[2] = 1; // Es inclinacion
 		}
+
+	  }
+
+	if(STRUCT_SENSOR.Valor_Humedad > MaximaHumedad)
+	{
+		FlagUmbral[ExcesoHumedad] = 1;
 	}
-		if(STRUCT_SENSOR.Valor_Humedad > MaximaHumedad)
-		{
-		FlagUmbral[3] = 1;
+	if(STRUCT_SENSOR.Valor_Temperatura > MaximaTemperatura)
+	{
+	FlagUmbral[ExcesoTemperatura] = 1;
+	}
 
-		}
-		if(STRUCT_SENSOR.Valor_Temperatura > MaximaTemperatura)
-		{
-		FlagUmbral[4] = 1;
 
-		}
-
-		//ANALISIS SI ESTA VOLTEADO completamente
-
-		if(DataAcelerometro.FloatAceleracion[2] < 0)//Una porcion de G
-				{
+		//Analizo si está invertido 180 grados
+		if(DataAcelerometro.FloatAceleracion[2] < 0)
+				{//Antirrebote de invertido 180 grados
 					aux_invertido++;
 					if(aux_invertido == 100){ // ASUMO QUE ESTA VOLTEADO Y NO FUE UN SOLO GOLPE; 1 SEG APROX
-					FlagUmbral[6] = 1;
+					FlagUmbral[Invertido180] = 1; // efectivamente esta invertido
 					aux_invertido=0; //reseteo
 					}
 
@@ -89,40 +89,44 @@ void Logger (void)
 		{
 			if(aux_invertido < 3){
 				aux_invertido = 0;
-				FlagUmbral[1] = 1; // FUE UN GOLPE
+				FlagUmbral[AceleracionExcedida] = 1; // FUE UN GOLPE
 			}
 		}
 
 
 
 	//ACÁ ES DONDE GRABA LOS DATOS EN LA MEMORIA
-if(FlagUmbral[0]==1||FlagUmbral[1]==1||FlagUmbral[2]==1||FlagUmbral[3]==1||FlagUmbral[4]==1||FlagUmbral[5]==1||FlagUmbral[6]==1)
-
+if(FlagUmbral[AceleracionAngularExcedida]==1||FlagUmbral[AceleracionExcedida]==1||FlagUmbral[AnguloExcedido]==1||FlagUmbral[ExcesoHumedad]==1||FlagUmbral[ExcesoTemperatura]==1||FlagUmbral[BateriaBaja]==1||FlagUmbral[Invertido180]==1)
 {//GRABA EN LA MEMORIA
 extern uint32_t LeyoCantidadGolpesDeLaMemoria;
 extern uint32_t GraboInfoBateriaBaja;
-		Ciclo_Memoria_Reading_CantidadGolpes(); // LEO LA ULTIMA POSICION DE MEMORIA GRABADA
-		Ciclo_Memoria_Working();
-		Ciclo_Memoria_Writing_CantidadGolpes(); // ESCRIBO LAST MEMORY POSITION
+		Ciclo_Memoria_Reading_CantidadGolpes(); // LEO DE MEMORIA LA ULTIMA POSICION DE MEMORIA GRABADA
+		Ciclo_Memoria_Working(); // ESCRIBO LOS DATOS EN MEMORIA
+		Ciclo_Memoria_Writing_CantidadGolpes(); // ESCRIBO EN MEMORIA LA ULTIMA POSICION
+
 		if(LeyoCantidadGolpesDeLaMemoria == 0)
 		{ Ciclo_Memoria_Reading_CantidadGolpes();
 		}
 		if(LeyoCantidadGolpesDeLaMemoria == 1)
-		{
-			cantidad_golpes++;
+		{	cantidad_golpes++;
 			Ciclo_Memoria_Writing_CantidadGolpes();
-			}
+		}
 		Grabado = 1;
- if(FlagUmbral[5] == 1 && Grabado == 1) // SI ESTOY EN CASO DE BATERIA BAJA
- {
-	 GraboInfoBateriaBaja = 1;
- }
+	 if(FlagUmbral[BateriaBaja] == 1 && Grabado == 1) // SI ESTOY EN CASO DE BATERIA BAJA
+	 {												// Y YA GRABE TODO EN MEMORIA
+		 GraboInfoBateriaBaja = 1;
+	 }
 }
 
-if(Grabado){// && Enviado){
-
-	FlagUmbral[0]=0;FlagUmbral[1]=0;FlagUmbral[2]=0;FlagUmbral[3]=0;FlagUmbral[4]=0;FlagUmbral[5]=0; FlagUmbral[6]=0;
-	Grabado = 0;
-	//Enviado = 0;
+	if(Grabado)
+	{
+		FlagUmbral[AceleracionAngularExcedida] = 0;
+		FlagUmbral[AceleracionExcedida] = 0;
+		FlagUmbral[AnguloExcedido] = 0;
+		FlagUmbral[ExcesoHumedad] = 0;
+		FlagUmbral[ExcesoTemperatura] = 0;
+		FlagUmbral[BateriaBaja] = 0;
+		FlagUmbral[Invertido180] = 0;
+		Grabado = 0;
 	}
 }

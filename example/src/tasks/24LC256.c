@@ -386,11 +386,11 @@ extern uint32_t FlagUmbral[NMROFLAGS];
 	dataTX[5] = getdigit((int)DataAcelerometro.Orientacion [1],0); // Y
 	dataTX[6] = getdigit((int)DataAcelerometro.Orientacion [1],1);
 	dataTX[7] = 'T';
-	dataTX[8] = getdigit((int)STRUCT_SENSOR.Valor_Temperatura,0);
-	dataTX[9] = getdigit((int)STRUCT_SENSOR.Valor_Temperatura,1);
+	dataTX[8] = getdigit((int)STRUCT_SENSOR.Valor_Temperatura,1);
+	dataTX[9] = getdigit((int)STRUCT_SENSOR.Valor_Temperatura,0);
 	dataTX[10] = 'H';
-	dataTX[11] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,0);
-	dataTX[12] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,1);
+	dataTX[11] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,1);
+	dataTX[12] = getdigit((int)STRUCT_SENSOR.Valor_Humedad,0);
 
 
 	for(i=0; i<NMROFLAGS; i++)
