@@ -22,7 +22,7 @@ int i;
 uint32_t j = 0;
 static char cadena[LEN_BUF];
 memset(cadena,0,LEN_BUF);
-//uint8_t auxiliar1, auxiliar2;
+//uint8_t auxiliar1, auxiliar2;#
 
 if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 {
