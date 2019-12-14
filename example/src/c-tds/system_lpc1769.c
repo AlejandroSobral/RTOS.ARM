@@ -145,8 +145,8 @@ void SYSTEM_Configure_Required_Mode(void)
         	//Agrego esta tareas para hacer una primera lectura de los botones
         	//sobre todo para el caso del reset
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
-        	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
-        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+        	SCH_Add_Task(Switch_Reset, 0, 1, 500, 0);
+        	SCH_Add_Task(Switcheo_Lista,0,1,3000,0);
 
 
 
@@ -209,6 +209,7 @@ extern uint32_t Switchea_lista_flag;
 extern uint32_t GolpesLeidos;
 extern uint32_t cantidad_golpes;
 extern uint32_t UltimaMemoriaLeida;
+extern uint32_t MemoriaBorrada ;
 extern int lecturaunica;
 
 	if (Switchea_lista_flag) //Si me mandaron a switchear la lista de tareas
@@ -229,8 +230,9 @@ extern int lecturaunica;
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
-        	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
-        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+            SCH_Add_Task(Switch_Reset, 0, 1, 500, 0);
+            SCH_Add_Task(Switch_MODO, 0, 1, 4000, 0);
+            SCH_Add_Task(Switcheo_Lista,0,1,3000,0);
         	SCH_Add_Task(Ciclo_Memoria_Erase,0,1,2500000,0);
         	primer_inicio = 0;
 
@@ -241,11 +243,12 @@ extern int lecturaunica;
             SysTick->CTRL |= 0x01;
             SysTick->CTRL |= 0x02;
             UltimaMemoriaLeida = Offset;
+            MemoriaBorrada = 0;
             lecturaunica = 0;
         	SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
-        	SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
-        	SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
-        	SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+            SCH_Add_Task(Switch_Reset, 0, 1, 500, 0);
+            SCH_Add_Task(Switch_MODO, 0, 1, 4000, 0);
+        	SCH_Add_Task(Switcheo_Lista,0,1,3000,0);
         	SCH_Add_Task(InformeBT,0,1,250000,0); //Tarea que arma los mensajes
 
 			break;
@@ -256,20 +259,21 @@ extern int lecturaunica;
            SysTick->CTRL |= 0x01;
            SysTick->CTRL |= 0x02;
            GolpesLeidos=0;
+           MemoriaBorrada = 0;
            primer_inicio = 1; //Este flag me sirve para saber si alguna vez entré en este estado
            UltimaMemoriaLeida = Offset;
            SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
-           SCH_Add_Task(Switch_Reset, 0, 1, 250, 0);
-           SCH_Add_Task(Switch_MODO, 0, 1, 250, 0);
-           SCH_Add_Task(GPIO_DHT11,  1, 3, 500000, 0);
+           SCH_Add_Task(Switch_Reset, 0, 1, 500, 0);
+           SCH_Add_Task(Switch_MODO, 0, 1, 4000, 0);
+           SCH_Add_Task(GPIO_DHT11,  1, 2, 500000, 0);
            SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
            SCH_Add_Task( Acelerometro_Update,  1, 2, 80000, 0);
-           SCH_Add_Task( EstadoBateria,  1, 1, 200000, 0);
+           SCH_Add_Task( EstadoBateria,  1, 1, 2000, 0);
 //           SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
 //           SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
 //           SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
            SCH_Add_Task( Logger,  1, 2, 200000, 0);
-           SCH_Add_Task(Switcheo_Lista,0,1,250,0);
+           SCH_Add_Task(Switcheo_Lista,0,1,3000,0);
 
            break;
 	       	}

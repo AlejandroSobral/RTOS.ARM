@@ -33,7 +33,8 @@ if(toggle)
 
 	if (switch_input_reset == SW_PRESSED && toggle == 0)
 	{	antirrebote_veces++;
-		if(antirrebote_veces >= 1){ //ANTIRREBOTE OK
+		if(antirrebote_veces >= 1)
+		{ //ANTIRREBOTE OK
 			toggle = 1;
     	antirrebote_veces = 0; // REINICIO EL CONTADOR
 
@@ -53,16 +54,29 @@ if(toggle)
 		}
 	}
 	else
-	{
-		Sw_switch_Reset_state = SW_NOT_PRESSED; //
-		if(ESTADO_GLOBAL.Modo == RESET && Sw_switch_Reset_state == SW_NOT_PRESSED )
-			{Switchea_lista_flag = 1;
-			antirrebote_veces = antirrebote_veces;
-			}
+	{	Sw_switch_Reset_state = SW_NOT_PRESSED; //
 
-		if(ESTADO_GLOBAL.Modo!= BTH){ // SI ESTOY TX BTH, IGNORO ESTO
-		ESTADO_GLOBAL.Modo = SENSORES;
+		if(ESTADO_GLOBAL.Modo == RESET && Sw_switch_Reset_state == SW_NOT_PRESSED)
+		{
+			ESTADO_GLOBAL.Modo = SENSORES;
+			Switchea_lista_flag = 1;
 		}
+
+//		if(ESTADO_GLOBAL.Modo == SENSORES && Sw_switch_Reset_state == SW_NOT_PRESSED)
+//		{
+//			ESTADO_GLOBAL.Modo = SENSORES;
+//			Switchear_lista_flag = 1;
+//		}
+//
+//
+//		if(ESTADO_GLOBAL.Modo == RESET && Sw_switch_Reset_state == SW_NOT_PRESSED )
+//			{Switchea_lista_flag = 1;
+//			antirrebote_veces = antirrebote_veces;
+//			}
+//
+//		if(ESTADO_GLOBAL.Modo!= BTH){ // SI ESTOY TX BTH, IGNORO ESTO
+//		ESTADO_GLOBAL.Modo = SENSORES;
+//		}
 
 	}
 

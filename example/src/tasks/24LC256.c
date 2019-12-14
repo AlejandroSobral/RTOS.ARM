@@ -32,6 +32,7 @@ uint32_t UltimaMemoriaErase;
 struct_dataRXeeprom dataRXeeprom_Read[CantidadMaximaGolpes];
  uint32_t IndicePaginaRead;
  uint32_t LeyoCantidadGolpesDeLaMemoria;
+ uint32_t 		MemoriaBorrada;
 
 
 
@@ -59,21 +60,28 @@ uint32_t i = 0, j = 0;
 
 	if(UltimaMemoriaErase > (MaxPos)) UltimaMemoriaErase = 0;
 
-
-while(UltimaMemoriaErase < MaxPos){
-	PreparaPaginaErase(); //Acelerometro angular y fuerza G
-	i2c_state = Write_24LC(dataTX, UltimaMemoriaErase);
-
-
-	while(i2c_state != I2C_STATUS_DONE){
+if(MemoriaBorrada == 0){
+	while(UltimaMemoriaErase < MaxPos)
+	{
+		PreparaPaginaErase(); //Acelerometro angular y fuerza G
 		i2c_state = Write_24LC(dataTX, UltimaMemoriaErase);
+
+
+		while(i2c_state != I2C_STATUS_DONE){
+			i2c_state = Write_24LC(dataTX, UltimaMemoriaErase);
+		}
+
+		if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaErase+=TamPag;}
+
+		if(UltimaMemoriaErase == MaxPos)
+		{
+			MemoriaBorrada = 1;
+		}
 	}
-
-	if(i2c_state == I2C_STATUS_DONE ){UltimaMemoriaErase+=TamPag;}
-
 }
 UltimaMemoriaErase = 0;
 LeyoCantidadGolpesDeLaMemoria = 0;
+
 
 for (i = 0; i<CantidadMaximaGolpes; i++)
 	{	for(j = 0; j<TamPag ; j++)

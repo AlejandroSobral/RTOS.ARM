@@ -32,10 +32,16 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 		{
 
 			sprintf(cadena,"No se obtuvieron datos de viaje.\r\n");
-			if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+			for(i=0;i<40;i++)
 			{
-			for(i=0;i<LEN_BUFF;i++)
+				while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
+				{
+					;
+				}
+				if((Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE))
+				{
 				Chip_UART_SendByte(LPC_UART1,cadena[i]);
+				}
 			}
 		}
 		else
@@ -134,7 +140,7 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 
 								if (dataRXeeprom_Read[j+1].dataRX2[14]==1)
 								{	memset(cadena,0,LEN_BUF);
-									sprintf(cadena," Hubo una fuerte acel.\r\n");
+									sprintf(cadena," Hubo una golpe de mas de 2g.\r\n");
 									for(i=0;i<35;i++)
 									{
 										while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));
@@ -225,7 +231,7 @@ if(Chip_UART_ReadLineStatus(LPC_UART1)&UART_LSR_RDR)
 
 								if (dataRXeeprom_Read[j+1].dataRX2[19]==1)
 								{	memset(cadena,0,LEN_BUF);
-									sprintf(cadena," Me dieron vuelta como una media.\r\n");
+									sprintf(cadena," Inversion de 180 grados detectada \r\n");
 									for(i=0;i<39;i++)
 									{
 										while (!(Chip_UART_ReadLineStatus(LPC_UART1) & UART_LSR_THRE));

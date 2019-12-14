@@ -39,10 +39,12 @@ void Acelerometro_Init (void){
 	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
 	memset(buf,0,sizeof(uint8_t)*LEN_BUF);
 	buf[0]=0x1C; //Acá configuró el acelerómetro
-	buf[1]=0x018; //8g maxima escala
+	buf[1]=0x10; //8g maxima escala
+	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
+
 	memset(buf,0,sizeof(uint8_t)*LEN_BUF);
 		buf[0]=0x1B; //Acá configuró el giróscopo 1000g/s
-		buf[1]=0x18;
+		buf[1]=0x10;
 
 	Chip_I2C_MasterSend(I2C1,0x68,buf,2);
 
@@ -83,16 +85,16 @@ extern uint32_t enviarSerie;
 
 					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.Aceleracion[0];
 					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.FloatAceleracion[0]*Gravedad;
-					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.FloatAceleracion[0]/16384;
+					DataAcelerometro.FloatAceleracion[0] = DataAcelerometro.FloatAceleracion[0]/(4096); // 16384
 
 
 					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.Aceleracion[1];
 					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.FloatAceleracion[1]*Gravedad;
-					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.FloatAceleracion[1]/16384;
+					DataAcelerometro.FloatAceleracion[1] = DataAcelerometro.FloatAceleracion[1]/(4096);
 
 					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.Aceleracion[2];
 					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]*Gravedad;
-					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]/16384;
+					DataAcelerometro.FloatAceleracion[2] = DataAcelerometro.FloatAceleracion[2]/(4096);
 
 
 

@@ -68,6 +68,8 @@ typedef struct{
 	uint8_t DATA_SENSOR_ARRAY[5];
 	uint32_t Valor_Humedad;
 	uint32_t Valor_Temperatura;
+	uint32_t Valor_TemperaturaSincro;
+	uint32_t Valor_HumedadSincro;
 	uint8_t BufferTemperatura[4];
 	uint8_t BufferHumedad[4];
 } struct_sensores;

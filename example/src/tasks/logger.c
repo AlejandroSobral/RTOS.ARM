@@ -20,6 +20,7 @@
 //5=Bateria
 //6 = Dado vuelta
 
+uint32_t Pausa_Golpe;
 uint32_t FlagUmbral[NMROFLAGS];
 uint32_t cantidad_golpes;
 static uint32_t aux_invertido;
@@ -44,25 +45,38 @@ void Logger (void)
 			FlagUmbral[AceleracionAngularExcedida] = 1; //giro brusco
 		}
 
-		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional)
+		if(DataAcelerometro.FloatAceleracion[i] > MaximaAceleracionGravitacional || DataAcelerometro.FloatAceleracion[i] < -MaximaAceleracionGravitacional )
 		{
+			if( i == 2 && DataAcelerometro.FloatAceleracion[i] > (MaximaAceleracionGravitacional+Gravedad) )
+			{ // Si es en Z, hay que sumar la gravedad
 			FlagUmbral[AceleracionExcedida] = 1; // Golpe
-		}
-	}
-
-	for(i = 0; i<XYBuf ; i++)
-	{
-		if(FlagUmbral[AceleracionExcedida] == 0) // SI ES 1, IMPLICA QUE SE GOLPEO, NO PUEDO MEDIR ANGULOS
-		{
-			DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
-			if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55))
+			Pausa_Golpe = 1;
+			}
+			else
 			{
-				FlagUmbral[AnguloExcedido] = 1; // Es inclinacion
-
+			FlagUmbral[AceleracionExcedida] = 1; // Golpe
+			Pausa_Golpe = 1;
 			}
 		}
 
-	  }
+
+
+		if(FlagUmbral[AceleracionExcedida] == 0) Pausa_Golpe = 0; // Hasta que no detecto que el golpe frenó, no mido inclinación
+	}
+
+//	for(i = 0; i<XYBuf ; i++)
+//	{
+//		if(FlagUmbral[AceleracionExcedida] == 0 && Pausa_Golpe == 0) // SI ES 1, IMPLICA QUE SE GOLPEO, NO PUEDO MEDIR ANGULOS
+//		{
+//			DatoAcelerometro_Orientacion = DataAcelerometro.Orientacion[i];
+//			if((DatoAcelerometro_Orientacion > 55 || DatoAcelerometro_Orientacion < -55))
+//			{
+//				FlagUmbral[AnguloExcedido] = 1; // Es inclinacion
+//
+//			}
+//		}
+//
+//	  }
 
 	if(STRUCT_SENSOR.Valor_Humedad > MaximaHumedad)
 	{
@@ -85,12 +99,11 @@ void Logger (void)
 
 				}
 
-		if(DataAcelerometro.FloatAceleracion[2] > 0 && aux_invertido > 0)
+		if(DataAcelerometro.FloatAceleracion[2] < -7000 && aux_invertido == 0 && FlagUmbral[Invertido180] == 0 ) //Casi 2g
 		{
-			if(aux_invertido < 3){
-				aux_invertido = 0;
+
 				FlagUmbral[AceleracionExcedida] = 1; // FUE UN GOLPE
-			}
+
 		}
 
 

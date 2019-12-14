@@ -8,7 +8,8 @@
 // ------ Public variable ------------------------------------------
 struct_sensores STRUCT_SENSOR;
 uint8_t DemoraInicial = 0, EstadoLectura = DEMORA;
-uint8_t demora_lanzada = 0;
+uint8_t demora_lanzada;
+uint32_t Flag_StartDHT = 0;
 
 
 // ------ Private variable -----------------------------------------
@@ -55,15 +56,17 @@ void Timer1_Init(void)
 
 
 void GPIO_DHT11(void)
-{
-
+{		uint32_t Pendiente;
+		uint32_t CuentaActual;
 		uint8_t Estado_Anterior	= ALTO; //Por default
 		uint8_t contador		= 0, ValorLeido;
-		extern uint8_t demora_lanzada;
+
 		extern uint8_t DemoraInicial ;
 		extern uint8_t EstadoLectura ;
 		uint8_t Numero_Bit		= 0, Numero_Transicion = 0;
 		extern struct_sensores STRUCT_SENSOR;
+		STRUCT_SENSOR.Valor_HumedadSincro = STRUCT_SENSOR.Valor_Humedad;
+		STRUCT_SENSOR.Valor_TemperaturaSincro = STRUCT_SENSOR.Valor_Temperatura;
 
 
 		 //BAJO EL PIN Y ESPERO 20mS aprox
@@ -90,7 +93,7 @@ void GPIO_DHT11(void)
 
 											while(demora_lanzada == 1)
 											{
-
+												demora_lanzada = demora_lanzada;
 											}
 											Chip_TIMER_Disable(LPC_TIMER1);
 											// Disable interrupt for Timer 0
@@ -123,7 +126,7 @@ void GPIO_DHT11(void)
 
 								while(demora_lanzada == 1)
 								{
-
+									demora_lanzada = demora_lanzada;
 								}
 								Chip_TIMER_Disable(LPC_TIMER1);
 								// Disable interrupt for Timer 0
@@ -179,7 +182,16 @@ void GPIO_DHT11(void)
 		}
 
 	}
+		if( STRUCT_SENSOR.Valor_Humedad > 0 || STRUCT_SENSOR.Valor_Temperatura > 0)
+		{
+			Flag_StartDHT = 1;
+		}
 
+		if( Flag_StartDHT == 1 && (STRUCT_SENSOR.Valor_Humedad == 0 || STRUCT_SENSOR.Valor_Temperatura == 0))
+		{
+			STRUCT_SENSOR.Valor_Humedad = STRUCT_SENSOR.Valor_HumedadSincro;
+			STRUCT_SENSOR.Valor_Temperatura = STRUCT_SENSOR.Valor_TemperaturaSincro;
+		}
 
 		// ENCIENDO LAS INTERRUPCIONES
 }

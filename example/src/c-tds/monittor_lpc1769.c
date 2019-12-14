@@ -131,7 +131,7 @@ uint32_t MONITTOR_I_Stop(void)
 
 	if( (Execution_time_us + Task_t_variation_G) > Task_WCET_G)
 		{
-			SYSTEM_Change_Mode_Fault(FAULT_TASK_TIMING);
+			//SYSTEM_Change_Mode_Fault(FAULT_TASK_TIMING);
 			actual = SCH_Get_Current_Task_Pointer();
 			actual->Debug.WCET = Execution_time_us;
 		}
