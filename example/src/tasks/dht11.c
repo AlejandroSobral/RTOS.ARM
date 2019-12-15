@@ -93,7 +93,7 @@ void GPIO_DHT11(void)
 
 											while(demora_lanzada == 1)
 											{
-												demora_lanzada = demora_lanzada;
+												;
 											}
 											Chip_TIMER_Disable(LPC_TIMER1);
 											// Disable interrupt for Timer 0
@@ -126,13 +126,13 @@ void GPIO_DHT11(void)
 
 								while(demora_lanzada == 1)
 								{
-									demora_lanzada = demora_lanzada;
+									;
 								}
 								Chip_TIMER_Disable(LPC_TIMER1);
 								// Disable interrupt for Timer 0
 								NVIC_DisableIRQ(TIMER1_IRQn);
 
-				if ( contador == 25 )
+				if ( contador == 28 )
 				{
 					EstadoLectura = DEMORA;
 					DemoraInicial = 0;
@@ -142,7 +142,7 @@ void GPIO_DHT11(void)
 			ValorLeido = Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_DHT11_PORT, GPIO_DHT11_PIN);
 			Estado_Anterior = ValorLeido;
 
-			if ( contador == 25 )
+			if ( contador == 28 )
 			{
 				EstadoLectura = DEMORA;
 				DemoraInicial = 0;

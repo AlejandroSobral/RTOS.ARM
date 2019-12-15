@@ -24,6 +24,7 @@
 #include "../tasks/SwitchReset.h"
 #include "../tasks/InformeBT.h"
 #include "../tasks/SwitchModo.h"
+#include "../tasks/GPS.h"
 #include "../c-tds/scheduler_lpc1769.h"
 
 
@@ -135,6 +136,7 @@ void SYSTEM_Configure_Required_Mode(void)
         	Acelerometro_Init();
         	ADC0_Init();
         	UartMonitor_Init();
+        	UartGPSInit();
         	Switch_Reset_Init();
         	Switch_MODO_Init();
         	Ciclo_Memoria_Reading_CantidadGolpes();
@@ -265,13 +267,11 @@ extern int lecturaunica;
            SCH_Add_Task(WATCHDOG_Update, 0, 1, 250, 0);
            SCH_Add_Task(Switch_Reset, 0, 1, 500, 0);
            SCH_Add_Task(Switch_MODO, 0, 1, 4000, 0);
-           SCH_Add_Task(GPIO_DHT11,  1, 2, 500000, 0);
+           SCH_Add_Task(TareaLeeGPS, 0, 2, 10000, 0);
+           SCH_Add_Task(GPIO_DHT11,  2, 2, 500000, 0);
            SCH_Add_Task( HEARTBEAT_Update,  1, 1, 500, 0);
            SCH_Add_Task( Acelerometro_Update,  1, 2, 80000, 0);
            SCH_Add_Task( EstadoBateria,  1, 1, 2000, 0);
-//           SCH_Add_Task( UartMonitor,  1, 2, 200000, 0);
-//           SCH_Add_Task( Ciclo_Memoria_Working,  3, 5, 200000, 0);
-//           SCH_Add_Task( Ciclo_Memoria_Reading,  3, 5, 200000, 0);
            SCH_Add_Task( Logger,  1, 2, 200000, 0);
            SCH_Add_Task(Switcheo_Lista,0,1,3000,0);
 

@@ -5,7 +5,7 @@
 /** Page Size		*/
 #define TamPag 32
 /** i2c port used */
-#define I2C_PORT I2C1 //
+#define I2C_PORT I2C0 //
 #define TX_OK 0
 #define PaginasPorGolpe 4
 #define CantidadMaximaGolpes 30

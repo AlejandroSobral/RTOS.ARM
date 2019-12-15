@@ -12,10 +12,10 @@
 #define I2C_SPEED_ACELEROMETRO		(400000)
 #define TIC_ACEL		(20)
 #define LEN_BUF			(80)
-#define UART1_PORT		(0)
-#define UART1_TXD_PIN	(15)
-#define UART1_RXD_PIN	(16)
-#define UART1_BAUDRATE	(9600)
+//#define UART1_PORT		(0)
+//#define UART1_TXD_PIN	(15)
+//#define UART1_RXD_PIN	(16)
+//#define UART1_BAUDRATE	(9600)
 #define MSG_LEN			(80)
 #define Gravedad	9827
 

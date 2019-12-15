@@ -16,6 +16,7 @@
 uint16_t bufADC;
 int enviandoSerie = 0;
 uint32_t GraboInfoBateriaBaja;
+uint32_t BatBajaContador;
 extern
 
 
@@ -50,14 +51,22 @@ void EstadoBateria(void)
 	NivelBateria = bufADC * 8;
 	PorcentajeFloat = (float)NivelBateria / (float)100;
 	PorcentajeInt = (int)PorcentajeFloat;
-	if (PorcentajeInt < 200)
+	if (PorcentajeInt < 175)
 	{
-		FlagUmbral[5] = 1; // Flag de batería baja
-		if(GraboInfoBateriaBaja == 1)
+		BatBajaContador++;
+		if(BatBajaContador >= 100)
 		{
-			SYSTEM_Perform_Safe_Shutdown();
+			FlagUmbral[5] = 1; // Flag de batería baja
+			if(GraboInfoBateriaBaja == 1)
+			{
+				SYSTEM_Perform_Safe_Shutdown();
+			}
 		}
 
+	}
+	else
+	{
+		BatBajaContador = 0;
 	}
 
 }

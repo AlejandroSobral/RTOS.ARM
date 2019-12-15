@@ -113,7 +113,7 @@ if(FlagUmbral[AceleracionAngularExcedida]==1||FlagUmbral[AceleracionExcedida]==1
 {//GRABA EN LA MEMORIA
 extern uint32_t LeyoCantidadGolpesDeLaMemoria;
 extern uint32_t GraboInfoBateriaBaja;
-		Ciclo_Memoria_Reading_CantidadGolpes(); // LEO DE MEMORIA LA ULTIMA POSICION DE MEMORIA GRABADA
+ 		Ciclo_Memoria_Reading_CantidadGolpes(); // LEO DE MEMORIA LA ULTIMA POSICION DE MEMORIA GRABADA
 		Ciclo_Memoria_Working(); // ESCRIBO LOS DATOS EN MEMORIA
 		Ciclo_Memoria_Writing_CantidadGolpes(); // ESCRIBO EN MEMORIA LA ULTIMA POSICION
 
