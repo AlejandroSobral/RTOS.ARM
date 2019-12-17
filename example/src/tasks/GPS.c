@@ -49,7 +49,7 @@ void UartGPSInit (void)
 void TareaLeeGPS(void)
 {
 	static char bufsal[26];
-	static char bufent[70];
+	static char bufent[60];
 	static int ix=0;
 	char dummy;
 	static int estado = 1;
@@ -77,43 +77,74 @@ void TareaLeeGPS(void)
 			break;
 
 		case Guardando:
+			// $GPRMC,123412.00 ,A,3435.71704,S,  05826.52804,W,0 .044,,300919,,,A *79
+			memset(bufent,0,63);
 
-			while (!(Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_RDR));
-			{
-				;
-			}
 			if(Chip_UART_ReadLineStatus(LPC_UART2)&UART_LSR_RDR)
+			{
+				Chip_UART_Read(LPC_UART2, (void*)&dummy, 1);
+
+				if(dummy == '$')
 				{
-					Chip_UART_Read(LPC_UART2, (void*)&dummy, 1);
-					//if(dummy == '$' || ix == 70)
-					if(dummy == '$')
-					{
-						memset(bufent,0,70);
-						ix = 0;
-						bufent[ix++]='$';
-						break;
-					}
-					else if(ix == 70)
-					{
-						strncpy(buffgps,bufent,70);
-						memset(bufent,0,70);
+					ix = Chip_UART_ReadBlocking(LPC_UART2, bufent, sizeof(bufent));
+					sprintf(hora, "%c%c:%c%c:%c%c\r\n", bufent[7], bufent[8], bufent[9], bufent[10], bufent[11], bufent[12]);
+					sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[19], bufent[20], bufent[21], bufent[22], bufent[24], bufent[25], bufent[26], bufent[27], bufent[28], bufent[30]);
+					sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[33], bufent[34], bufent[35], bufent[36], bufent[38], bufent[39], bufent[40], bufent[41], bufent[42], bufent[44]);
+					sprintf(fecha, "%c%c/%c%c/%c%c\r\n", bufent[53], bufent[54], bufent[55], bufent[56], bufent[57], bufent[58]);
 
-						sprintf(hora, "%c%c:%c%c:%c%c\r\n", buffgps[7], buffgps[8], buffgps[9], buffgps[10], buffgps[11], buffgps[12]);
-						sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[19], buffgps[20], buffgps[21], buffgps[22], buffgps[24], buffgps[25], buffgps[26], buffgps[27], buffgps[28], buffgps[30]);
-						sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[33], buffgps[34], buffgps[35], buffgps[36], buffgps[38], buffgps[39], buffgps[40], buffgps[41], buffgps[42], buffgps[44]);
-						sprintf(fecha, "%c%c/%c%c/%c%c\r\n", buffgps[53], buffgps[54], buffgps[55], buffgps[56], buffgps[57], buffgps[58]);
-
-						estado = Soltando;
-						break;
-
-					}
-					else
-					{
-						bufent[ix++]=dummy;
-						break;
-					}
 				}
+			}
+
+
+			Chip_UART_Read(LPC_UART2,bufent,1)
+			//ix = Chip_UART_ReadBlocking(LPC_UART2, bufent, sizeof(bufent));
+			if(bufent[0] == '$')
+			{
+			sprintf(hora, "%c%c:%c%c:%c%c\r\n", bufent[7], bufent[8], bufent[9], bufent[10], bufent[11], bufent[12]);
+			sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[19], bufent[20], bufent[21], bufent[22], bufent[24], bufent[25], bufent[26], bufent[27], bufent[28], bufent[30]);
+			sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[33], bufent[34], bufent[35], bufent[36], bufent[38], bufent[39], bufent[40], bufent[41], bufent[42], bufent[44]);
+			sprintf(fecha, "%c%c/%c%c/%c%c\r\n", bufent[53], bufent[54], bufent[55], bufent[56], bufent[57], bufent[58]);
+			}
+			ix = 0;
+
+			estado = Soltando;
 			break;
+//			while (!(Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_RDR));
+//			{
+//				;
+//			}
+//			if(Chip_UART_ReadLineStatus(LPC_UART2)&UART_LSR_RDR)
+//				{
+//					Chip_UART_Read(LPC_UART2, (void*)&dummy, 1);
+//					//if(dummy == '$' || ix == 70)
+//					if(dummy == '$')
+//					{
+//						memset(bufent,0,70);
+//						ix = 0;
+//						bufent[ix++]='$';
+//						break;
+//					}
+//					else if(ix > 60)
+//					{
+//						strncpy(buffgps,bufent,70);
+//						memset(bufent,0,70);
+//
+//						sprintf(hora, "%c%c:%c%c:%c%c\r\n", buffgps[7], buffgps[8], buffgps[9], buffgps[10], buffgps[11], buffgps[12]);
+//						sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[19], buffgps[20], buffgps[21], buffgps[22], buffgps[24], buffgps[25], buffgps[26], buffgps[27], buffgps[28], buffgps[30]);
+//						sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[33], buffgps[34], buffgps[35], buffgps[36], buffgps[38], buffgps[39], buffgps[40], buffgps[41], buffgps[42], buffgps[44]);
+//						sprintf(fecha, "%c%c/%c%c/%c%c\r\n", buffgps[53], buffgps[54], buffgps[55], buffgps[56], buffgps[57], buffgps[58]);
+//
+//						estado = Soltando;
+//						break;
+//
+//					}
+//					else
+//					{
+//						bufent[ix++]=dummy;
+//						break;
+//					}
+//				}
+//			break;
 
 		case Soltando:
 
