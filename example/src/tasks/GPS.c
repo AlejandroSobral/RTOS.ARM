@@ -46,163 +46,59 @@ void UartGPSInit (void)
 		Chip_UART_TXEnable(LPC_UART2);
 }
 
-void TareaLeeGPS(void)
+void TareaLeeGPS(void) //El GPS arranca sin mandar ningún mensaje.
 {
-	static char bufsal[26];
-	static char bufent[60];
+	static char bufsal[16];
+	static char bufent[128];
 	static int ix=0;
+	static int cadena_invalida = 0;
 	char dummy;
-	static int estado = 1;
 
 	static int i=0;
 
-	switch (estado)
+	memset(bufsal,0,sizeof(bufsal));
+	sprintf(bufsal,"$EIGPQ,RMC\r\n"); //Pide al GPS que envíe las coordenadas una sola vez
+	for(i=0;i<sizeof(bufsal);i++)
 	{
-
-		case Pidiendo:
-			memset(bufsal,0,26); // $PUBX,40,RMC,0,0,0,0,0,0 desactiva, $PUBX,40,RMC,0,1,0,0,0,0 activa
-			sprintf(bufsal,"$PUBX,40,RMC,0,1,0,0,0,0\r\n");
-			for(i=0;i<26;i++)
-			{
-				while (!(Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_THRE));
-				{
-					;
-				}
-				if((Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_THRE))
-				{
-				Chip_UART_SendByte(LPC_UART2,bufsal[i]);
-				}
-			}
-			estado = Guardando;
-			break;
-
-		case Guardando:
-			// $GPRMC,123412.00 ,A,3435.71704,S,  05826.52804,W,0 .044,,300919,,,A *79
-			memset(bufent,0,63);
-
-			if(Chip_UART_ReadLineStatus(LPC_UART2)&UART_LSR_RDR)
-			{
-				Chip_UART_Read(LPC_UART2, (void*)&dummy, 1);
-
-				if(dummy == '$')
-				{
-					ix = Chip_UART_ReadBlocking(LPC_UART2, bufent, sizeof(bufent));
-					sprintf(hora, "%c%c:%c%c:%c%c\r\n", bufent[7], bufent[8], bufent[9], bufent[10], bufent[11], bufent[12]);
-					sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[19], bufent[20], bufent[21], bufent[22], bufent[24], bufent[25], bufent[26], bufent[27], bufent[28], bufent[30]);
-					sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[33], bufent[34], bufent[35], bufent[36], bufent[38], bufent[39], bufent[40], bufent[41], bufent[42], bufent[44]);
-					sprintf(fecha, "%c%c/%c%c/%c%c\r\n", bufent[53], bufent[54], bufent[55], bufent[56], bufent[57], bufent[58]);
-
-				}
-			}
-
-
-			Chip_UART_Read(LPC_UART2,bufent,1)
-			//ix = Chip_UART_ReadBlocking(LPC_UART2, bufent, sizeof(bufent));
-			if(bufent[0] == '$')
-			{
-			sprintf(hora, "%c%c:%c%c:%c%c\r\n", bufent[7], bufent[8], bufent[9], bufent[10], bufent[11], bufent[12]);
-			sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[19], bufent[20], bufent[21], bufent[22], bufent[24], bufent[25], bufent[26], bufent[27], bufent[28], bufent[30]);
-			sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", bufent[33], bufent[34], bufent[35], bufent[36], bufent[38], bufent[39], bufent[40], bufent[41], bufent[42], bufent[44]);
-			sprintf(fecha, "%c%c/%c%c/%c%c\r\n", bufent[53], bufent[54], bufent[55], bufent[56], bufent[57], bufent[58]);
-			}
-			ix = 0;
-
-			estado = Soltando;
-			break;
-//			while (!(Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_RDR));
-//			{
-//				;
-//			}
-//			if(Chip_UART_ReadLineStatus(LPC_UART2)&UART_LSR_RDR)
-//				{
-//					Chip_UART_Read(LPC_UART2, (void*)&dummy, 1);
-//					//if(dummy == '$' || ix == 70)
-//					if(dummy == '$')
-//					{
-//						memset(bufent,0,70);
-//						ix = 0;
-//						bufent[ix++]='$';
-//						break;
-//					}
-//					else if(ix > 60)
-//					{
-//						strncpy(buffgps,bufent,70);
-//						memset(bufent,0,70);
-//
-//						sprintf(hora, "%c%c:%c%c:%c%c\r\n", buffgps[7], buffgps[8], buffgps[9], buffgps[10], buffgps[11], buffgps[12]);
-//						sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[19], buffgps[20], buffgps[21], buffgps[22], buffgps[24], buffgps[25], buffgps[26], buffgps[27], buffgps[28], buffgps[30]);
-//						sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[33], buffgps[34], buffgps[35], buffgps[36], buffgps[38], buffgps[39], buffgps[40], buffgps[41], buffgps[42], buffgps[44]);
-//						sprintf(fecha, "%c%c/%c%c/%c%c\r\n", buffgps[53], buffgps[54], buffgps[55], buffgps[56], buffgps[57], buffgps[58]);
-//
-//						estado = Soltando;
-//						break;
-//
-//					}
-//					else
-//					{
-//						bufent[ix++]=dummy;
-//						break;
-//					}
-//				}
-//			break;
-
-		case Soltando:
-
-			memset(bufsal,0,26); // $PUBX,40,RMC,0,0,0,0,0,0 desactiva, $PUBX,40,RMC,0,1,0,0,0,0 activa
-			sprintf(bufsal,"$PUBX,40,RMC,0,0,0,0,0,0\r\n");
-
-			for(i=0;i<26;i++)
-			{
-				while (!(Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_THRE));
-				{
-					;
-				}
-				if((Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_THRE))
-				{
-				Chip_UART_SendByte(LPC_UART2,bufsal[i]);
-				}
-			}
-			estado = Pidiendo;
-			break;
-
-		default:
-			break;
+		while (!(Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_THRE))
+		{
+			;
+		}
+		if((Chip_UART_ReadLineStatus(LPC_UART2) & UART_LSR_THRE))
+		{
+		Chip_UART_SendByte(LPC_UART2, bufsal[i]);
+		}
 	}
 
+	if(Chip_UART_ReadLineStatus(LPC_UART2)&UART_LSR_RDR)
+	{
+		Chip_UART_Read(LPC_UART2, (void*)&dummy, 1); //El problema acá!
+		if(dummy == '$' || ix == 128)
+		{
+			memset(bufent,0,sizeof(bufent));
+			ix = 0;
+			bufent[ix++]='$';
+		}
+		else if(dummy == '\n')
+		{
+			if(!strncmp(bufent,"$GPRMC",strlen("$GPRMC")) && cadena_invalida == 0)
+			{
+				strncpy(buffgps,bufent,128);
 
-
-
-
-
-
-
+				sprintf(hora, "%c%c:%c%c:%c%c\r\n", buffgps[7], buffgps[8], buffgps[9], buffgps[10], buffgps[11], buffgps[12]);
+				sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[19], buffgps[20], buffgps[21], buffgps[22], buffgps[24], buffgps[25], buffgps[26], buffgps[27], buffgps[28], buffgps[30]);
+				sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[33], buffgps[34], buffgps[35], buffgps[36], buffgps[38], buffgps[39], buffgps[40], buffgps[41], buffgps[42], buffgps[44]);
+				sprintf(fecha, "%c%c/%c%c/%c%c\r\n", buffgps[53], buffgps[54], buffgps[55], buffgps[56], buffgps[57], buffgps[58]);
+			}
+			else
+				cadena_invalida = 0;
+		}
+		else
+		{
+			bufent[ix++]=dummy;
+			if (dummy == 'V')
+				cadena_invalida = 1;
+		}
+	}
 }
-
-//
-//	if(Chip_UART_ReadLineStatus(LPC_UART2)&UART_LSR_RDR)
-//	{
-//		Chip_UART_Read(LPC_UART2, (void*)&dummy, 1);
-//		if(dummy == '$' || ix == 128)
-//		{
-//			memset(buf,0,128);
-//			ix = 0;
-//			buf[ix++]='$';
-//		}
-//		else if(dummy == '\n')
-//		{
-//			if(!strncmp(buf,"$GPRMC",strlen("$GPRMC")))
-//			{
-//				strncpy(buffgps,buf,128);
-//
-//				sprintf(hora, "%c%c:%c%c:%c%c\r\n", buffgps[7], buffgps[8], buffgps[9], buffgps[10], buffgps[11], buffgps[12]);
-//				sprintf(latitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[19], buffgps[20], buffgps[21], buffgps[22], buffgps[24], buffgps[25], buffgps[26], buffgps[27], buffgps[28], buffgps[30]);
-//				sprintf(longitud, "%c%c %c%c'%c%c%c%c%c'' %c\r\n", buffgps[33], buffgps[34], buffgps[35], buffgps[36], buffgps[38], buffgps[39], buffgps[40], buffgps[41], buffgps[42], buffgps[44]);
-//				sprintf(fecha, "%c%c/%c%c/%c%c\r\n", buffgps[53], buffgps[54], buffgps[55], buffgps[56], buffgps[57], buffgps[58]);
-//			}
-//		}
-//		else
-//		{
-//			buf[ix++]=dummy;
-//		}
-//	}
 
